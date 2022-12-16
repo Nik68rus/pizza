@@ -4,8 +4,14 @@ import Header from './components/Header';
 import PizzaItem from './components/PizzaItem';
 import Sorting from './components/Sorting';
 import './scss/app.scss';
+import pizzas from './assets/pizzas.json';
+import { IPizza } from './types';
+
+const pizzaList = pizzas as IPizza[];
 
 function App() {
+  console.log(pizzas);
+
   return (
     <div className="wrapper">
       <Header />
@@ -17,13 +23,9 @@ function App() {
           </div>
           <h2 className="content__title">Все пиццы</h2>
           <div className="content__items">
-            <PizzaItem />
-            <PizzaItem />
-            <PizzaItem />
-            <PizzaItem />
-            <PizzaItem />
-            <PizzaItem />
-            <PizzaItem />
+            {pizzaList.map((pizza) => (
+              <PizzaItem key={pizza.id} {...pizza} />
+            ))}
           </div>
         </div>
       </div>
