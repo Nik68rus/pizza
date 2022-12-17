@@ -29,4 +29,15 @@
       color: #7b7b7b;
     }
   }
+
+  &__controls {
+    display: flex;
+    gap: 20px;
+  }
+
+  .button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }

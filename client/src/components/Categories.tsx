@@ -1,25 +1,17 @@
 import { useState } from 'react';
-
-const categories = [
-  'Все',
-  'Мясные',
-  'Вегетарианская',
-  'Гриль',
-  'Острые',
-  'Закрытые',
-];
+import { FilterType } from '../types';
 
 const Categories = () => {
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(FilterType.ALL);
 
   return (
     <div className="categories">
       <ul>
-        {categories.map((cat, i) => (
-          <li key={i}>
+        {Object.values(FilterType).map((cat) => (
+          <li key={cat}>
             <button
-              className={active === i ? 'active' : ''}
-              onClick={() => setActive(i)}
+              className={active === cat ? 'active' : ''}
+              onClick={() => setActive(cat)}
             >
               {cat}
             </button>

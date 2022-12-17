@@ -1,6 +1,15 @@
-import React from 'react';
+import { useState } from 'react';
+import { SortType } from '../types';
 
 const Sorting = () => {
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState(SortType.POPULAR);
+
+  const sortClickHandler = (sortType: SortType) => {
+    setActive(sortType);
+    setOpen(false);
+  };
+
   return (
     <div className="sort">
       <div className="sort__label">
@@ -17,15 +26,23 @@ const Sorting = () => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span>популярности</span>
+        <span onClick={() => setOpen(!open)}>{active}</span>
       </div>
-      <div className="sort__popup">
-        <ul>
-          <li className="active">популярности</li>
-          <li>цене</li>
-          <li>алфавиту</li>
-        </ul>
-      </div>
+      {open && (
+        <div className="sort__popup">
+          <ul>
+            {Object.values(SortType).map((sort) => (
+              <li
+                key={sort}
+                className={active === sort ? 'active' : ''}
+                onClick={sortClickHandler.bind(this, sort)}
+              >
+                {sort}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

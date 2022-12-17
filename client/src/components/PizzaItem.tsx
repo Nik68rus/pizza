@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IPizza, TypeNames } from '../types';
+import { IPizza, TypeName } from '../types';
 
 const PizzaItem = ({
   title,
@@ -30,7 +30,7 @@ const PizzaItem = ({
               className={activeType === type ? 'active' : ''}
               onClick={() => setActiveType(type)}
             >
-              {type === 0 ? TypeNames.TRADITION : TypeNames.THIN}
+              {Object.values(TypeName)[type]}
             </li>
           ))}
         </ul>
