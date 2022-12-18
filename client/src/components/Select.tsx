@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FaCaretDown, FaCaretUp } from 'react-icons/fa';
 import classes from './Select.module.scss';
 import cx from 'classnames';
@@ -13,12 +13,28 @@ type Props = {
 const Select = ({ items, label, onSelect, invalid }: Props) => {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(items[0].id);
+  const popupRef = useRef(null);
 
   const itemClickHandler = (id: number) => {
     setActive(id);
-    setOpen(false);
     onSelect(id);
   };
+
+  const docClickHandler = (e: MouseEvent) => {
+    setTimeout(() => {
+      document.addEventListener('click', () => setOpen(false), { once: true });
+    }, 10);
+  };
+
+  useEffect(() => {
+    if (open) {
+      document.addEventListener('click', docClickHandler, { once: true });
+    }
+
+    return () => {
+      document.removeEventListener('click', docClickHandler);
+    };
+  }, [open]);
 
   return (
     <div className={cx(classes.select, { [classes.invalid]: invalid })}>
@@ -30,7 +46,7 @@ const Select = ({ items, label, onSelect, invalid }: Props) => {
         </span>
       </div>
       {open && (
-        <div className={classes.popup}>
+        <div className={classes.popup} ref={popupRef}>
           <ul>
             {items.map((item) => (
               <li
