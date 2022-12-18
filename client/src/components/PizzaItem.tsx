@@ -1,17 +1,17 @@
 import { useState } from 'react';
-import { IPizza, TypeName } from '../types';
+import { IPizza } from '../types';
 
 const PizzaItem = ({
   title,
   price,
   imageUrl,
-  types,
+  bases,
   sizes,
-  category,
+  categoryId,
   rating,
 }: IPizza) => {
   const [count, setCount] = useState(0);
-  const [activeType, setActiveType] = useState(types[0]);
+  const [activeBase, setActiveBase] = useState(bases[0]);
   const [activeSize, setActiveSize] = useState(sizes[0]);
 
   const clickHandler = () => {
@@ -24,13 +24,13 @@ const PizzaItem = ({
       <h4 className="pizza-block__title">{title}</h4>
       <div className="pizza-block__selector">
         <ul>
-          {types.map((type) => (
+          {bases.map((base) => (
             <li
-              key={type}
-              className={activeType === type ? 'active' : ''}
-              onClick={() => setActiveType(type)}
+              key={base}
+              className={activeBase === base ? 'active' : ''}
+              onClick={() => setActiveBase(base)}
             >
-              {Object.values(TypeName)[type]}
+              {base}
             </li>
           ))}
         </ul>

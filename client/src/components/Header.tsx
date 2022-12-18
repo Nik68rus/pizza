@@ -1,6 +1,5 @@
 import React from 'react';
 import logoSvg from '../assets/img/pizza-logo.svg';
-import cartSvg from '../assets/img/cart.svg';
 import CartIcon from './CartIcon';
 import { Link } from 'react-router-dom';
 import { RoutePath } from '../types/routes';
@@ -19,6 +18,9 @@ const Header = () => {
           </div>
         </Link>
         <div className="header__controls">
+          <Link to={RoutePath.ADMIN} className="button">
+            Администрирование
+          </Link>
           <Link to={RoutePath.LOGIN} className="button">
             Войти
           </Link>

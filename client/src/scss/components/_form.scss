@@ -7,6 +7,20 @@
   margin-right: auto;
   width: 100%;
   max-width: 500px;
+
+  fieldset {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 2px solid black;
+
+    &.invalid {
+      border-color: red;
+    }
+  }
+
+  legend {
+    padding: 0 5px;
+  }
 }
 
 .form__control {
@@ -20,13 +34,21 @@
   input {
     font-size: 16px;
     padding: 5px;
+    border: 2px solid black;
+  }
+
+  &--invalid {
+    input {
+      border-color: red;
+    }
   }
 }
 
 .form__actions {
   margin-top: 20px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 20px;
   align-items: center;
   font-size: 16px;
 
@@ -38,5 +60,15 @@
     &:hover {
       opacity: 0.7;
     }
+  }
+}
+
+.form__checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+
+  input {
+    margin-right: 10px;
   }
 }
