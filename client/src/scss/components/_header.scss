@@ -8,6 +8,11 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    @include vp--s {
+      flex-direction: column;
+      gap: 20px;
+    }
   }
 
   &__logo {

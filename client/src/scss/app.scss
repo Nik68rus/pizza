@@ -1,4 +1,5 @@
 @import 'variables';
+@import 'mixins';
 @import 'libs/normalize';
 
 @import 'components/all';
@@ -24,16 +25,30 @@ body {
   }
 
   &__items {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 65px 35px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
+    justify-items: center;
+    align-content: center;
+    justify-content: center;
+
+    .pizza-block {
+      width: 100%;
+    }
   }
 
   &__top {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    @include vp--m {
+      flex-direction: column-reverse;
+      align-items: flex-start;
+      gap: 20px;
+    }
   }
 }
 
@@ -51,6 +66,10 @@ body {
 }
 
 .cart {
+  .content__items {
+    display: block;
+  }
+
   &__top {
     display: flex;
     justify-content: space-between;
@@ -80,6 +99,8 @@ body {
     align-items: center;
     cursor: pointer;
     @include noselect();
+    background-color: transparent;
+    border: none;
 
     span {
       display: inline-block;
@@ -150,14 +171,6 @@ body {
       justify-content: space-between;
       width: 13%;
 
-      &-minus {
-        svg {
-          path:first-of-type {
-            display: none;
-          }
-        }
-      }
-
       b {
         font-size: 22px;
       }
@@ -187,8 +200,6 @@ body {
       }
 
       svg {
-        transform: rotate(45deg);
-
         path {
           fill: darken($color: $gray-line, $amount: 15);
         }
@@ -257,10 +268,6 @@ body {
 
         svg {
           margin-right: 12px;
-          path {
-            fill: transparent;
-            stroke-width: 2;
-          }
         }
       }
 

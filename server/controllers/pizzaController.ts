@@ -20,7 +20,6 @@ class PizzaController {
   }
 
   async postPizza(req: PostPizzaRequest, res: Response, next: NextFunction) {
-    console.log(req.body);
     const { title, imageUrl, categoryId, sizes, bases, price } = req.body;
 
     if (

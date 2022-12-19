@@ -6,6 +6,7 @@ import { IPizza } from '../types';
 import Select from '../components/Select';
 import { getPizzas } from '../http/pizzaAPI';
 import { handleError } from '../helpers/error-handler';
+import PizzaSkeleton from '../components/skeletons/PizzaSkeleton';
 
 const sortings = [
   { id: 0, title: 'популярности' },
@@ -16,17 +17,22 @@ const sortings = [
 const Home = () => {
   const [sorting, setSorting] = useState<null | number>(null);
   const [items, setItems] = useState<IPizza[]>([]);
+  const [pizzaLoading, setPizzaLoading] = useState(true);
 
   useEffect(() => {
     const getData = async () => {
       try {
+        setPizzaLoading(true);
         const pizzas = await getPizzas();
         setItems(pizzas);
       } catch (err) {
         handleError(err);
+      } finally {
+        setPizzaLoading(false);
       }
     };
     getData();
+    window.scrollTo(0, 0);
   }, []);
 
   return (
@@ -42,8 +48,12 @@ const Home = () => {
         </div>
         <h2 className="content__title">Все пиццы</h2>
         <div className="content__items">
-          {items.length &&
-            items.map((pizza) => <PizzaItem key={pizza.id} {...pizza} />)}
+          {pizzaLoading
+            ? new Array(8)
+                .fill(null)
+                .map((item, i) => <PizzaSkeleton key={i} />)
+            : items.length &&
+              items.map((pizza) => <PizzaItem key={pizza.id} {...pizza} />)}
         </div>
       </div>
     </div>
