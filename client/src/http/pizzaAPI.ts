@@ -1,4 +1,4 @@
-import { IPizza, IPizzaInput } from './../types/index';
+import { IPizza, IPizzaInput, TSortingOrder } from './../types/index';
 import { api } from '.';
 
 interface IPizzaPostResponse {
@@ -6,7 +6,7 @@ interface IPizzaPostResponse {
 }
 
 interface IPizzaGetResponse {
-  payload: IPizza[];
+  payload: { count: number; rows: IPizza[] };
 }
 
 export const createPizza = async (pizza: IPizzaInput) => {
@@ -14,7 +14,23 @@ export const createPizza = async (pizza: IPizzaInput) => {
   return data.payload;
 };
 
-export const getPizzas = async () => {
-  const { data } = await api.get<IPizzaGetResponse>('/pizza');
+export const getPizzas = async (
+  categoryId: number,
+  sortingProperty: string,
+  sortingOrder: TSortingOrder,
+  searchTerm: string,
+  page: number,
+  limit: number
+) => {
+  const { data } = await api.get<IPizzaGetResponse>('/pizza', {
+    params: {
+      sortBy: sortingProperty,
+      categoryId,
+      order: sortingOrder,
+      search: searchTerm,
+      page,
+      limit,
+    },
+  });
   return data.payload;
 };

@@ -3,21 +3,26 @@ import { FaCaretDown, FaCaretUp } from 'react-icons/fa';
 import classes from './Select.module.scss';
 import cx from 'classnames';
 
-type Props = {
-  items: { title: string; id: number }[];
+interface Props<T> {
+  items: T[];
   label: string;
-  onSelect: (id: number) => void;
+  onSelect: (item: T) => void;
   invalid?: boolean;
-};
+}
 
-const Select = ({ items, label, onSelect, invalid }: Props) => {
+const Select = <T extends { id: number; title: string }>({
+  items,
+  label,
+  onSelect,
+  invalid,
+}: Props<T>) => {
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(items[0].id);
   const popupRef = useRef(null);
 
-  const itemClickHandler = (id: number) => {
-    setActive(id);
-    onSelect(id);
+  const itemClickHandler = (item: T) => {
+    setActive(item.id);
+    onSelect(item);
   };
 
   const docClickHandler = (e: MouseEvent) => {
@@ -52,7 +57,7 @@ const Select = ({ items, label, onSelect, invalid }: Props) => {
               <li
                 key={item.id}
                 className={active === item.id ? classes.active : ''}
-                onClick={itemClickHandler.bind(this, item.id)}
+                onClick={itemClickHandler.bind(this, item)}
               >
                 {item.title}
               </li>

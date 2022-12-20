@@ -19,7 +19,7 @@ const AddPizzaModal = ({ onClose, heading, onSubmit }: Props) => {
   ]);
   const [title, setTitle] = useState('');
   const [imageUrl, setImageUrl] = useState('');
-  const [selectedCat, setSelectedCat] = useState<null | number>(null);
+  const [selectedCat, setSelectedCat] = useState<null | ICategory>(null);
   const [sizes, setSizes] = useState<number[]>([]);
   const [bases, setBases] = useState<string[]>([]);
   const [price, setPrice] = useState('');
@@ -28,7 +28,7 @@ const AddPizzaModal = ({ onClose, heading, onSubmit }: Props) => {
   const pizza = {
     title,
     imageUrl,
-    categoryId: selectedCat,
+    categoryId: selectedCat ? selectedCat.id : 0,
     sizes: sizes.sort((a, b) => a - b),
     bases: bases.sort(),
     price: +price,

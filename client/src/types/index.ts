@@ -7,6 +7,14 @@ export interface IPizzaInput {
   price: number;
 }
 
+export type TSortingOrder = 'asc' | 'desc';
+export interface ISorting {
+  id: number;
+  title: string;
+  property: string;
+  order: TSortingOrder;
+}
+
 export interface IPizza {
   id: number;
   imageUrl: string;
@@ -22,3 +30,8 @@ export interface ICategory {
   id: number;
   title: string;
 }
+
+export const ALL_CAT: ICategory = {
+  title: 'Все',
+  id: 0,
+};

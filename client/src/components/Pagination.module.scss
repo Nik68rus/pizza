@@ -1,0 +1,25 @@
+@use '../scss/variables';
+
+.pagination {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+
+  button {
+    border-radius: 50%;
+    padding: 8px;
+    border: 1px solid variables.$orange;
+    background-color: transparent;
+    min-width: 40px;
+    height: 40px;
+    cursor: pointer;
+    color: variables.$orange;
+    font-weight: 700;
+    font-size: 16px;
+
+    &.active {
+      color: white;
+      background-color: variables.$orange;
+    }
+  }
+}

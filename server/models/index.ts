@@ -27,19 +27,19 @@ export const Category = sequelize.define<Category>('category', {
   },
 });
 
-interface Pizza
-  extends Model<InferAttributes<Pizza>, InferCreationAttributes<Pizza>> {
+export interface IPizza
+  extends Model<InferAttributes<IPizza>, InferCreationAttributes<IPizza>> {
   id: CreationOptional<number>;
   title: string;
   imageUrl: string;
   sizes: number[];
-  bases: TBaseType[];
+  bases: string[];
   price: number;
   categoryId: CreationOptional<number>;
   rating?: number;
 }
 
-export const Pizza = sequelize.define('pizza', {
+export const Pizza = sequelize.define<IPizza>('pizza', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -59,7 +59,7 @@ export const Pizza = sequelize.define('pizza', {
     allowNull: false,
   },
   bases: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
+    type: DataTypes.ARRAY(DataTypes.ENUM('традиционное', 'тонкое')),
     allowNull: false,
   },
   price: {

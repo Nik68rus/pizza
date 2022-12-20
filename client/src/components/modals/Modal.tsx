@@ -1,4 +1,4 @@
-import React from 'react';
+import { useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { FaTimes } from 'react-icons/fa';
 const modalRoot = document.getElementById('modal-root')!;
@@ -10,6 +10,23 @@ type Props = {
 };
 
 const Modal = ({ children, onClose, heading }: Props) => {
+  const keyDownHandler = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    },
+    [onClose]
+  );
+
+  useEffect(() => {
+    document.addEventListener('keydown', keyDownHandler);
+
+    return () => {
+      document.removeEventListener('keydown', keyDownHandler);
+    };
+  }, [keyDownHandler]);
+
   return createPortal(
     <section className="modal">
       <div className="modal__overlay" onClick={onClose} />

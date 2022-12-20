@@ -14,7 +14,7 @@ const PizzaSkeleton = () => {
     if (pizzaRef.current) {
       setSizes({
         width: pizzaRef.current.clientWidth,
-        height: pizzaRef.current.clientWidth * 1.53,
+        height: pizzaRef.current.clientWidth * 1.52,
       });
     }
   }, [width]);

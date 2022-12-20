@@ -1,24 +1,23 @@
 import { useState, useEffect } from 'react';
 import { handleError } from '../helpers/error-handler';
 import { getCategories } from '../http/categoryAPI';
-import { ICategory } from '../types';
+import { ALL_CAT, ICategory } from '../types';
 import CategorySkeleton from './skeletons/CategorySkeleton';
 
-const allCat: ICategory = {
-  title: 'Все',
-  id: 0,
-};
+interface Props {
+  onSelect: (cat: ICategory) => void;
+}
 
-const Categories = () => {
-  const [categories, setCategories] = useState<ICategory[]>([allCat]);
-  const [active, setActive] = useState<ICategory>(allCat);
+const Categories = ({ onSelect }: Props) => {
+  const [categories, setCategories] = useState<ICategory[]>([ALL_CAT]);
+  const [active, setActive] = useState<ICategory>(ALL_CAT);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getData = async () => {
       try {
         const fetchedCategories = await getCategories();
-        setCategories([allCat, ...fetchedCategories]);
+        setCategories([ALL_CAT, ...fetchedCategories]);
       } catch (error) {
         handleError(error);
       } finally {
@@ -39,7 +38,10 @@ const Categories = () => {
               <li key={cat.id}>
                 <button
                   className={active.id === cat.id ? 'active' : ''}
-                  onClick={() => setActive(cat)}
+                  onClick={() => {
+                    setActive(cat);
+                    onSelect(cat);
+                  }}
                 >
                   {cat.title}
                 </button>
