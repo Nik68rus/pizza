@@ -1,13 +1,34 @@
-import React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import classes from './Search.module.scss';
 import { FaSearch, FaTimes } from 'react-icons/fa';
+import { setSearchTerm } from '../store/slices/filterSlice';
+import { useAppDispatch } from '../hooks/store';
 
-interface Props {
-  value: string;
-  changeHandler: (value: string) => void;
-}
+const Search = () => {
+  const [value, setValue] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+  const dispatch = useAppDispatch();
 
-const Search = ({ value, changeHandler }: Props) => {
+  const clearHandler = () => {
+    setValue('');
+    dispatch(setSearchTerm(''));
+    inputRef.current?.focus();
+  };
+
+  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      dispatch(setSearchTerm(value));
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [value, dispatch]);
+
   return (
     <div className={classes.search}>
       <form className="form">
@@ -17,12 +38,13 @@ const Search = ({ value, changeHandler }: Props) => {
             type="text"
             placeholder="Введите название"
             value={value}
-            onChange={(e) => changeHandler(e.target.value)}
+            onChange={changeHandler}
+            ref={inputRef}
           />
           <button
             type="reset"
             aria-label="Очистить поле"
-            onClick={() => changeHandler('')}
+            onClick={clearHandler}
           >
             <FaTimes />
           </button>

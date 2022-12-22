@@ -1,20 +1,24 @@
 import React from 'react';
+import { useAppDispatch, useAppSelector } from '../hooks/store';
+import { setCurrentPage } from '../store/slices/pageSlice';
 import classes from './Pagination.module.scss';
 
-interface Props {
-  count: number;
-  current: number;
-  onClick: (n: number) => void;
-}
+const Pagination = () => {
+  const dispatch = useAppDispatch();
+  const { totalPizzaCount, limit, currentPage } = useAppSelector(
+    (state) => state.page
+  );
+  const pagesCount = Math.ceil(totalPizzaCount / (limit || 6));
 
-const Pagination = ({ count, current, onClick }: Props) => {
+  if (pagesCount === 1) return null;
+
   return (
     <ul className={classes.pagination}>
-      {new Array(count).fill(1).map((item, i) => (
+      {new Array(pagesCount).fill(1).map((item, i) => (
         <li key={i}>
           <button
-            className={current === i + 1 ? classes.active : ''}
-            onClick={onClick.bind(this, i + 1)}
+            className={currentPage === i + 1 ? classes.active : ''}
+            onClick={() => dispatch(setCurrentPage(i + 1))}
           >
             {i + 1}
           </button>

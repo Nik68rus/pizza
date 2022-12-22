@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { FaCaretDown, FaCaretUp } from 'react-icons/fa';
 import classes from './Select.module.scss';
 import cx from 'classnames';
@@ -20,16 +20,19 @@ const Select = <T extends { id: number; title: string }>({
   const [active, setActive] = useState(items[0].id);
   const popupRef = useRef(null);
 
-  const itemClickHandler = (item: T) => {
-    setActive(item.id);
-    onSelect(item);
-  };
+  const itemClickHandler = useCallback(
+    (item: T) => {
+      setActive(item.id);
+      onSelect(item);
+    },
+    [onSelect]
+  );
 
-  const docClickHandler = (e: MouseEvent) => {
+  const docClickHandler = useCallback((e: MouseEvent) => {
     setTimeout(() => {
       document.addEventListener('click', () => setOpen(false), { once: true });
     }, 10);
-  };
+  }, []);
 
   useEffect(() => {
     if (open) {
@@ -39,7 +42,7 @@ const Select = <T extends { id: number; title: string }>({
     return () => {
       document.removeEventListener('click', docClickHandler);
     };
-  }, [open]);
+  }, [open, docClickHandler]);
 
   return (
     <div className={cx(classes.select, { [classes.invalid]: invalid })}>

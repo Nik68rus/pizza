@@ -30,8 +30,3 @@ export interface ICategory {
   id: number;
   title: string;
 }
-
-export const ALL_CAT: ICategory = {
-  title: 'Все',
-  id: 0,
-};

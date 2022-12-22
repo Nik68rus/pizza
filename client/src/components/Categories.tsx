@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react';
+import { ALL_CAT } from '../helpers/constants';
 import { handleError } from '../helpers/error-handler';
 import { getCategories } from '../http/categoryAPI';
-import { ALL_CAT, ICategory } from '../types';
+import { ICategory } from '../types';
 import CategorySkeleton from './skeletons/CategorySkeleton';
+import { useAppDispatch, useAppSelector } from '../hooks/store';
+import { setCategory } from '../store/slices/filterSlice';
+import { setCurrentPage } from '../store/slices/pageSlice';
 
-interface Props {
-  onSelect: (cat: ICategory) => void;
-}
-
-const Categories = ({ onSelect }: Props) => {
+const Categories = () => {
   const [categories, setCategories] = useState<ICategory[]>([ALL_CAT]);
-  const [active, setActive] = useState<ICategory>(ALL_CAT);
   const [loading, setLoading] = useState(true);
+  const dispatch = useAppDispatch();
+  const category = useAppSelector((state) => state.filter.category);
 
   useEffect(() => {
     const getData = async () => {
@@ -37,10 +38,10 @@ const Categories = ({ onSelect }: Props) => {
           : categories.map((cat) => (
               <li key={cat.id}>
                 <button
-                  className={active.id === cat.id ? 'active' : ''}
+                  className={category.id === cat.id ? 'active' : ''}
                   onClick={() => {
-                    setActive(cat);
-                    onSelect(cat);
+                    dispatch(setCategory(cat));
+                    dispatch(setCurrentPage(1));
                   }}
                 >
                   {cat.title}
