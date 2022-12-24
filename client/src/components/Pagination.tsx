@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
 import { setCurrentPage } from '../store/slices/pageSlice';
 import classes from './Pagination.module.scss';
@@ -8,7 +9,20 @@ const Pagination = () => {
   const { totalPizzaCount, limit, currentPage } = useAppSelector(
     (state) => state.page
   );
+  const [searchParams, setSearchParams] = useSearchParams();
   const pagesCount = Math.ceil(totalPizzaCount / (limit || 6));
+
+  const clickHandler = (i: number) => {
+    dispatch(setCurrentPage(i + 1));
+    if (i === 0) {
+      searchParams.delete('page');
+      searchParams.delete('limit');
+    } else {
+      searchParams.set('page', (i + 1).toString());
+      searchParams.set('limit', limit.toString());
+    }
+    setSearchParams(searchParams);
+  };
 
   if (pagesCount === 1) return null;
 
@@ -18,7 +32,7 @@ const Pagination = () => {
         <li key={i}>
           <button
             className={currentPage === i + 1 ? classes.active : ''}
-            onClick={() => dispatch(setCurrentPage(i + 1))}
+            onClick={clickHandler.bind(this, i)}
           >
             {i + 1}
           </button>

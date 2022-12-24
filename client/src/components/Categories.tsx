@@ -2,23 +2,27 @@ import { useState, useEffect } from 'react';
 import { ALL_CAT } from '../helpers/constants';
 import { handleError } from '../helpers/error-handler';
 import { getCategories } from '../http/categoryAPI';
-import { ICategory } from '../types';
 import CategorySkeleton from './skeletons/CategorySkeleton';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
 import { setCategory } from '../store/slices/filterSlice';
 import { setCurrentPage } from '../store/slices/pageSlice';
+import { setCategories } from '../store/slices/pizzaSlice';
+import { ICategory } from '../types';
+import { useSearchParams } from 'react-router-dom';
 
 const Categories = () => {
-  const [categories, setCategories] = useState<ICategory[]>([ALL_CAT]);
   const [loading, setLoading] = useState(true);
   const dispatch = useAppDispatch();
   const category = useAppSelector((state) => state.filter.category);
+  const categories = useAppSelector((state) => state.pizza.categories);
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     const getData = async () => {
       try {
         const fetchedCategories = await getCategories();
-        setCategories([ALL_CAT, ...fetchedCategories]);
+        dispatch(setCategories([ALL_CAT, ...fetchedCategories]));
       } catch (error) {
         handleError(error);
       } finally {
@@ -26,7 +30,20 @@ const Categories = () => {
       }
     };
     getData();
-  }, []);
+  }, [dispatch]);
+
+  const clickHandler = (cat: ICategory) => {
+    dispatch(setCategory(cat));
+    dispatch(setCurrentPage(1));
+    searchParams.delete('limit');
+    searchParams.delete('page');
+    if (cat.id !== 0) {
+      searchParams.set('categoryId', cat.id.toString());
+    } else {
+      searchParams.delete('categoryId');
+    }
+    setSearchParams(searchParams);
+  };
 
   return (
     <div className="categories">
@@ -39,10 +56,7 @@ const Categories = () => {
               <li key={cat.id}>
                 <button
                   className={category.id === cat.id ? 'active' : ''}
-                  onClick={() => {
-                    dispatch(setCategory(cat));
-                    dispatch(setCurrentPage(1));
-                  }}
+                  onClick={clickHandler.bind(this, cat)}
                 >
                   {cat.title}
                 </button>

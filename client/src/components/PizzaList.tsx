@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { PIZZA_MIN_WIDTH } from '../helpers/constants';
 import { handleError } from '../helpers/error-handler';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
@@ -16,7 +16,28 @@ const PizzaList = () => {
   const { sorting, category, searchTerm } = useAppSelector(
     (state) => state.filter
   );
-  const { currentPage, limit } = useAppSelector((state) => state.page);
+  const currentPage = useAppSelector((state) => state.page.currentPage);
+  const limit = useAppSelector((state) => state.page.limit);
+
+  const getData = useCallback(async () => {
+    try {
+      dispatch(setPizzaLoading(true));
+      const pizzas = await getPizzas(
+        category.id,
+        sorting?.property || 'rating',
+        sorting?.order || 'asc',
+        searchTerm.trim(),
+        currentPage,
+        limit || 6
+      );
+      dispatch(setPizzas(pizzas.rows));
+      dispatch(setTotalPizzaCount(pizzas.count));
+    } catch (err) {
+      handleError(err);
+    } finally {
+      dispatch(setPizzaLoading(false));
+    }
+  }, [category, sorting, searchTerm, limit, currentPage, dispatch]);
 
   useEffect(() => {
     if (gridRef.current) {
@@ -27,32 +48,12 @@ const PizzaList = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        dispatch(setPizzaLoading(true));
-        const pizzas = await getPizzas(
-          category.id,
-          sorting?.property || 'rating',
-          sorting?.order || 'asc',
-          searchTerm.trim(),
-          currentPage,
-          limit || 6
-        );
-        dispatch(setPizzas(pizzas.rows));
-        dispatch(setTotalPizzaCount(pizzas.count));
-      } catch (err) {
-        handleError(err);
-      } finally {
-        dispatch(setPizzaLoading(false));
-      }
-    };
-
     if (limit > 0) {
       getData();
     }
 
     // window.scrollTo(0, 0);
-  }, [category, sorting, searchTerm, limit, currentPage, dispatch]);
+  }, [limit, getData]);
 
   return (
     <>

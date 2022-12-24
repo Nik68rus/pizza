@@ -8,6 +8,7 @@ interface Props<T> {
   label: string;
   onSelect: (item: T) => void;
   invalid?: boolean;
+  selected?: T;
 }
 
 const Select = <T extends { id: number; title: string }>({
@@ -15,10 +16,11 @@ const Select = <T extends { id: number; title: string }>({
   label,
   onSelect,
   invalid,
+  selected,
 }: Props<T>) => {
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState(items[0].id);
   const popupRef = useRef(null);
+  const [active, setActive] = useState(selected ? selected.id : items[0].id);
 
   const itemClickHandler = useCallback(
     (item: T) => {
