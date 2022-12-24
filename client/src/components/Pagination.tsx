@@ -6,11 +6,10 @@ import classes from './Pagination.module.scss';
 
 const Pagination = () => {
   const dispatch = useAppDispatch();
-  const { totalPizzaCount, limit, currentPage } = useAppSelector(
-    (state) => state.page
-  );
+  const { limit, currentPage } = useAppSelector((state) => state.page);
+  const totalCount = useAppSelector((state) => state.pizza.totalCount);
   const [searchParams, setSearchParams] = useSearchParams();
-  const pagesCount = Math.ceil(totalPizzaCount / (limit || 6));
+  const pagesCount = Math.ceil(totalCount / (limit || 6));
 
   const clickHandler = (i: number) => {
     dispatch(setCurrentPage(i + 1));

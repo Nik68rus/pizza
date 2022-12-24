@@ -20,6 +20,23 @@ body {
 .content {
   padding: 40px 0;
 
+  &__error {
+    text-align: center;
+    padding-top: 40px;
+    padding-bottom: 40px;
+
+    i {
+      margin-top: 30px;
+      font-style: normal;
+      display: block;
+    }
+
+    p {
+      margin-top: 30px;
+      margin-bottom: 30px;
+    }
+  }
+
   &__title {
     margin: 35px 0;
   }

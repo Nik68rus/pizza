@@ -43,3 +43,14 @@ export interface IToCartItem {
 export interface IInCartItem extends IToCartItem {
   qty: number;
 }
+
+export type TStatus = 'loading' | 'success' | 'failed';
+
+export interface PizzaFetchParams {
+  categoryId: number;
+  sortingProperty: string;
+  sortingOrder: TSortingOrder;
+  searchTerm: string;
+  page: number;
+  limit: number;
+}

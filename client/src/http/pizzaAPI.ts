@@ -1,4 +1,4 @@
-import { IPizza, IPizzaInput, TSortingOrder } from './../types/index';
+import { IPizza, IPizzaInput, PizzaFetchParams } from './../types/index';
 import { api } from '.';
 
 interface IPizzaPostResponse {
@@ -14,14 +14,14 @@ export const createPizza = async (pizza: IPizzaInput) => {
   return data.payload;
 };
 
-export const getPizzas = async (
-  categoryId: number,
-  sortingProperty: string,
-  sortingOrder: TSortingOrder,
-  searchTerm: string,
-  page: number,
-  limit: number
-) => {
+export const getPizzas = async ({
+  categoryId,
+  sortingProperty,
+  sortingOrder,
+  searchTerm,
+  page,
+  limit,
+}: PizzaFetchParams) => {
   const { data } = await api.get<IPizzaGetResponse>('/pizza', {
     params: {
       sortBy: sortingProperty,

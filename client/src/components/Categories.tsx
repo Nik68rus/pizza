@@ -1,40 +1,37 @@
-import { useState, useEffect } from 'react';
-import { ALL_CAT } from '../helpers/constants';
-import { handleError } from '../helpers/error-handler';
-import { getCategories } from '../http/categoryAPI';
+import { useEffect } from 'react';
 import CategorySkeleton from './skeletons/CategorySkeleton';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
 import { setCategory } from '../store/slices/filterSlice';
 import { setCurrentPage } from '../store/slices/pageSlice';
-import { setCategories } from '../store/slices/pizzaSlice';
 import { ICategory } from '../types';
 import { useSearchParams } from 'react-router-dom';
+import { fetchCategories } from '../store/slices/pizzaSlice';
+import { handleError } from '../helpers/error-handler';
 
 const Categories = () => {
-  const [loading, setLoading] = useState(true);
   const dispatch = useAppDispatch();
   const category = useAppSelector((state) => state.filter.category);
   const categories = useAppSelector((state) => state.pizza.categories);
+  const catLoading = useAppSelector((state) => state.pizza.catLoading);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const fetchedCategories = await getCategories();
-        dispatch(setCategories([ALL_CAT, ...fetchedCategories]));
-      } catch (error) {
-        handleError(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getData();
+    dispatch(fetchCategories());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (catLoading === 'failed') {
+      handleError(
+        'При попытке загрузить категории произошла ошибка. Повторите запрос позднее'
+      );
+    }
+  }, [catLoading]);
 
   const clickHandler = (cat: ICategory) => {
     dispatch(setCategory(cat));
     dispatch(setCurrentPage(1));
+
     searchParams.delete('limit');
     searchParams.delete('page');
     if (cat.id !== 0) {
@@ -48,7 +45,7 @@ const Categories = () => {
   return (
     <div className="categories">
       <ul>
-        {loading
+        {catLoading === 'loading'
           ? new Array(6)
               .fill(null)
               .map((item, i) => <CategorySkeleton key={i} />)
@@ -63,6 +60,11 @@ const Categories = () => {
               </li>
             ))}
       </ul>
+      {catLoading === 'failed' ? (
+        <button className="button" onClick={() => dispatch(fetchCategories())}>
+          Повторить
+        </button>
+      ) : null}
     </div>
   );
 };
