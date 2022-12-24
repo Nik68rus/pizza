@@ -30,3 +30,16 @@ export interface ICategory {
   id: number;
   title: string;
 }
+
+export interface IToCartItem {
+  id: string;
+  imageUrl: string;
+  title: string;
+  base: string;
+  size: number;
+  price: number;
+}
+
+export interface IInCartItem extends IToCartItem {
+  qty: number;
+}

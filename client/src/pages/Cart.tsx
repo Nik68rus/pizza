@@ -1,16 +1,24 @@
 import React from 'react';
-import {
-  FaCartPlus,
-  FaTrashAlt,
-  FaTimes,
-  FaArrowLeft,
-  FaPlus,
-  FaMinus,
-} from 'react-icons/fa';
+import { FaCartPlus, FaTrashAlt, FaArrowLeft } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import CartItem from '../components/CartItem';
+import EmptyCart from '../components/EmptyCart';
+import { useAppDispatch, useAppSelector } from '../hooks/store';
+import { resetCart } from '../store/slices/cartSlice';
 import { RoutePath } from '../types/routes';
 
 const Cart = () => {
+  const dispatch = useAppDispatch();
+  const { items, totalPrice, totalQty } = useAppSelector((state) => state.cart);
+
+  const resetHandler = () => {
+    dispatch(resetCart());
+  };
+
+  if (!totalQty) {
+    return <EmptyCart />;
+  }
+
   return (
     <div className="content">
       <div className="container container--cart">
@@ -19,290 +27,23 @@ const Cart = () => {
             <h2 className="content__title">
               <FaCartPlus /> Корзина
             </h2>
-            <button className="cart__clear">
+            <button className="cart__clear" onClick={resetHandler}>
               <FaTrashAlt />
               <span>Очистить корзину</span>
             </button>
           </div>
           <div className="content__items">
-            <div className="cart__item">
-              <div className="cart__item-img">
-                <img
-                  className="pizza-block__image"
-                  src="https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg"
-                  alt="Pizza"
-                />
-              </div>
-              <div className="cart__item-info">
-                <h3>Сырный цыпленок</h3>
-                <p>тонкое тесто, 26 см.</p>
-              </div>
-              <div className="cart__item-count">
-                <button className="button button--outline button--circle cart__item-count-minus">
-                  <FaMinus />
-                </button>
-                <b>2</b>
-                <button className="button button--outline button--circle cart__item-count-plus">
-                  <FaPlus />
-                </button>
-              </div>
-              <div className="cart__item-price">
-                <b>770 ₽</b>
-              </div>
-              <div className="cart__item-remove">
-                <button className="button button--outline button--circle">
-                  <FaTimes />
-                </button>
-              </div>
-            </div>
-            <div className="cart__item">
-              <div className="cart__item-img">
-                <img
-                  className="pizza-block__image"
-                  src="https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg"
-                  alt="Pizza"
-                />
-              </div>
-              <div className="cart__item-info">
-                <h3>Сырный цыпленок</h3>
-                <p>тонкое тесто, 26 см.</p>
-              </div>
-              <div className="cart__item-count">
-                <button className="button button--outline button--circle cart__item-count-minus">
-                  <FaMinus />
-                </button>
-                <b>2</b>
-                <button className="button button--outline button--circle cart__item-count-plus">
-                  <FaPlus />
-                </button>
-              </div>
-              <div className="cart__item-price">
-                <b>770 ₽</b>
-              </div>
-              <div className="cart__item-remove">
-                <button className="button button--outline button--circle">
-                  <FaTimes />
-                </button>
-              </div>
-            </div>
-            <div className="cart__item">
-              <div className="cart__item-img">
-                <img
-                  className="pizza-block__image"
-                  src="https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg"
-                  alt="Pizza"
-                />
-              </div>
-              <div className="cart__item-info">
-                <h3>Сырный цыпленок</h3>
-                <p>тонкое тесто, 26 см.</p>
-              </div>
-              <div className="cart__item-count">
-                <button className="button button--outline button--circle cart__item-count-minus">
-                  <FaMinus />
-                </button>
-                <b>2</b>
-                <button className="button button--outline button--circle cart__item-count-plus">
-                  <FaPlus />
-                </button>
-              </div>
-              <div className="cart__item-price">
-                <b>770 ₽</b>
-              </div>
-              <div className="cart__item-remove">
-                <button className="button button--outline button--circle">
-                  <FaTimes />
-                </button>
-              </div>
-            </div>
-            <div className="cart__item">
-              <div className="cart__item-img">
-                <img
-                  className="pizza-block__image"
-                  src="https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg"
-                  alt="Pizza"
-                />
-              </div>
-              <div className="cart__item-info">
-                <h3>Сырный цыпленок</h3>
-                <p>тонкое тесто, 26 см.</p>
-              </div>
-              <div className="cart__item-count">
-                <button className="button button--outline button--circle cart__item-count-minus">
-                  <FaMinus />
-                </button>
-                <b>2</b>
-                <button className="button button--outline button--circle cart__item-count-plus">
-                  <FaPlus />
-                </button>
-              </div>
-              <div className="cart__item-price">
-                <b>770 ₽</b>
-              </div>
-              <div className="cart__item-remove">
-                <button className="button button--outline button--circle">
-                  <FaTimes />
-                </button>
-              </div>
-            </div>
-            <div className="cart__item">
-              <div className="cart__item-img">
-                <img
-                  className="pizza-block__image"
-                  src="https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg"
-                  alt="Pizza"
-                />
-              </div>
-              <div className="cart__item-info">
-                <h3>Сырный цыпленок</h3>
-                <p>тонкое тесто, 26 см.</p>
-              </div>
-              <div className="cart__item-count">
-                <button className="button button--outline button--circle cart__item-count-minus">
-                  <FaMinus />
-                </button>
-                <b>2</b>
-                <button className="button button--outline button--circle cart__item-count-plus">
-                  <FaPlus />
-                </button>
-              </div>
-              <div className="cart__item-price">
-                <b>770 ₽</b>
-              </div>
-              <div className="cart__item-remove">
-                <button className="button button--outline button--circle">
-                  <FaTimes />
-                </button>
-              </div>
-            </div>
-            <div className="cart__item">
-              <div className="cart__item-img">
-                <img
-                  className="pizza-block__image"
-                  src="https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg"
-                  alt="Pizza"
-                />
-              </div>
-              <div className="cart__item-info">
-                <h3>Сырный цыпленок</h3>
-                <p>тонкое тесто, 26 см.</p>
-              </div>
-              <div className="cart__item-count">
-                <button className="button button--outline button--circle cart__item-count-minus">
-                  <FaMinus />
-                </button>
-                <b>2</b>
-                <button className="button button--outline button--circle cart__item-count-plus">
-                  <FaPlus />
-                </button>
-              </div>
-              <div className="cart__item-price">
-                <b>770 ₽</b>
-              </div>
-              <div className="cart__item-remove">
-                <button className="button button--outline button--circle">
-                  <FaTimes />
-                </button>
-              </div>
-            </div>
-            <div className="cart__item">
-              <div className="cart__item-img">
-                <img
-                  className="pizza-block__image"
-                  src="https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg"
-                  alt="Pizza"
-                />
-              </div>
-              <div className="cart__item-info">
-                <h3>Сырный цыпленок</h3>
-                <p>тонкое тесто, 26 см.</p>
-              </div>
-              <div className="cart__item-count">
-                <button className="button button--outline button--circle cart__item-count-minus">
-                  <FaMinus />
-                </button>
-                <b>2</b>
-                <button className="button button--outline button--circle cart__item-count-plus">
-                  <FaPlus />
-                </button>
-              </div>
-              <div className="cart__item-price">
-                <b>770 ₽</b>
-              </div>
-              <div className="cart__item-remove">
-                <button className="button button--outline button--circle">
-                  <FaTimes />
-                </button>
-              </div>
-            </div>
-            <div className="cart__item">
-              <div className="cart__item-img">
-                <img
-                  className="pizza-block__image"
-                  src="https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg"
-                  alt="Pizza"
-                />
-              </div>
-              <div className="cart__item-info">
-                <h3>Сырный цыпленок</h3>
-                <p>тонкое тесто, 26 см.</p>
-              </div>
-              <div className="cart__item-count">
-                <button className="button button--outline button--circle cart__item-count-minus">
-                  <FaMinus />
-                </button>
-                <b>2</b>
-                <button className="button button--outline button--circle cart__item-count-plus">
-                  <FaPlus />
-                </button>
-              </div>
-              <div className="cart__item-price">
-                <b>770 ₽</b>
-              </div>
-              <div className="cart__item-remove">
-                <button className="button button--outline button--circle">
-                  <FaTimes />
-                </button>
-              </div>
-            </div>
-            <div className="cart__item">
-              <div className="cart__item-img">
-                <img
-                  className="pizza-block__image"
-                  src="https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg"
-                  alt="Pizza"
-                />
-              </div>
-              <div className="cart__item-info">
-                <h3>Сырный цыпленок</h3>
-                <p>тонкое тесто, 26 см.</p>
-              </div>
-              <div className="cart__item-count">
-                <button className="button button--outline button--circle cart__item-count-minus">
-                  <FaMinus />
-                </button>
-                <b>2</b>
-                <button className="button button--outline button--circle cart__item-count-plus">
-                  <FaPlus />
-                </button>
-              </div>
-              <div className="cart__item-price">
-                <b>770 ₽</b>
-              </div>
-              <div className="cart__item-remove">
-                <button className="button button--outline button--circle">
-                  <FaTimes />
-                </button>
-              </div>
-            </div>
+            {items.map((item) => (
+              <CartItem key={item.id} item={item} />
+            ))}
           </div>
           <div className="cart__bottom">
             <div className="cart__bottom-details">
               <span>
-                Всего пицц: <b>3 шт.</b>
+                Всего пицц: <b>{totalQty} шт.</b>
               </span>
               <span>
-                Сумма заказа: <b>900 ₽</b>
+                Сумма заказа: <b>{totalPrice} ₽</b>
               </span>
             </div>
             <div className="cart__bottom-buttons">

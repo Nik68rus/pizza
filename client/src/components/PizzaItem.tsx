@@ -1,21 +1,30 @@
 import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../hooks/store';
+import { addItem } from '../store/slices/cartSlice';
 import { IPizza } from '../types';
 
-const PizzaItem = ({
-  title,
-  price,
-  imageUrl,
-  bases,
-  sizes,
-  categoryId,
-  rating,
-}: IPizza) => {
-  const [count, setCount] = useState(0);
+const PizzaItem = ({ id, title, price, imageUrl, bases, sizes }: IPizza) => {
   const [activeBase, setActiveBase] = useState(bases[0]);
   const [activeSize, setActiveSize] = useState(sizes[0]);
 
+  const cartItemId = `${id}-${activeBase}-${activeSize}`;
+
+  const dispatch = useAppDispatch();
+  const cartItem = useAppSelector((state) =>
+    state.cart.items.find((item) => item.id === cartItemId)
+  );
+
   const clickHandler = () => {
-    setCount(count + 1);
+    dispatch(
+      addItem({
+        id: cartItemId,
+        imageUrl,
+        title,
+        base: activeBase,
+        size: activeSize,
+        price,
+      })
+    );
   };
 
   return (
@@ -65,7 +74,7 @@ const PizzaItem = ({
             />
           </svg>
           <span>Добавить</span>
-          <i>{count}</i>
+          {cartItem ? <i>{cartItem.qty}</i> : null}
         </button>
       </div>
     </div>

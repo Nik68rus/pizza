@@ -7,7 +7,7 @@ import PizzaList from '../components/PizzaList';
 import Sorting from '../components/Sorting';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
 import { setCategory, setSorting } from '../store/slices/filterSlice';
-import { ALL_CAT, SORTINGS } from '../helpers/constants';
+import { SORTINGS } from '../helpers/constants';
 import { setCurrentPage, setLimit } from '../store/slices/pageSlice';
 
 interface QueryParams {
@@ -58,8 +58,6 @@ const Home = () => {
         dispatch(setLimit(+params.limit));
         dispatch(setCurrentPage(+params.page));
       }
-    } else {
-      dispatch(setCategory(ALL_CAT));
     }
   }, [dispatch, categories]);
 

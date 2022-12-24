@@ -8,7 +8,7 @@ interface Props<T> {
   label: string;
   onSelect: (item: T) => void;
   invalid?: boolean;
-  selected?: T;
+  selected?: number;
 }
 
 const Select = <T extends { id: number; title: string }>({
@@ -20,7 +20,7 @@ const Select = <T extends { id: number; title: string }>({
 }: Props<T>) => {
   const [open, setOpen] = useState(false);
   const popupRef = useRef(null);
-  const [active, setActive] = useState(selected ? selected.id : items[0].id);
+  const [active, setActive] = useState(items[0].id);
 
   const itemClickHandler = useCallback(
     (item: T) => {
@@ -35,6 +35,10 @@ const Select = <T extends { id: number; title: string }>({
       document.addEventListener('click', () => setOpen(false), { once: true });
     }, 10);
   }, []);
+
+  useEffect(() => {
+    setActive(selected ? selected : items[0].id);
+  }, [selected, items]);
 
   useEffect(() => {
     if (open) {

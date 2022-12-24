@@ -3,8 +3,11 @@ import logoSvg from '../assets/img/pizza-logo.svg';
 import CartIcon from './CartIcon';
 import { Link } from 'react-router-dom';
 import { RoutePath } from '../types/routes';
+import { useAppSelector } from '../hooks/store';
 
 const Header = () => {
+  const { totalPrice, totalQty } = useAppSelector((state) => state.cart);
+
   return (
     <div className="header">
       <div className="container">
@@ -26,10 +29,10 @@ const Header = () => {
           </Link>
           <div className="header__cart">
             <Link to={RoutePath.CART} className="button button--cart">
-              <span>520 ₽</span>
+              <span>{totalPrice} ₽</span>
               <div className="button__delimiter"></div>
               <CartIcon />
-              <span>3</span>
+              <span>{totalQty}</span>
             </Link>
           </div>
         </div>

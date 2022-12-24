@@ -9,7 +9,7 @@ import Select from './Select';
 
 const Sorting = () => {
   const dispatch = useAppDispatch();
-  const sorting = useAppSelector((state) => state.filter.sorting);
+  const sortingId = useAppSelector((state) => state.filter.sorting.id);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const sortClickHandler = useCallback(
@@ -32,7 +32,7 @@ const Sorting = () => {
       label="Сортировка по:"
       items={SORTINGS}
       onSelect={sortClickHandler}
-      selected={sorting}
+      selected={sortingId}
     />
   );
 };
