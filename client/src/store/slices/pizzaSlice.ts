@@ -1,4 +1,5 @@
-import { getPizzas } from './../../http/pizzaAPI';
+import { RootState } from './../index';
+import { getPizzas, getPizzaById } from './../../http/pizzaAPI';
 import { getCategories } from './../../http/categoryAPI';
 import {
   ICategory,
@@ -23,12 +24,20 @@ export const fetchPizzas = createAsyncThunk(
   }
 );
 
+export const fetchPizzaById = createAsyncThunk(
+  'pizza/fetchPizzaByIdStatus',
+  async (id: number) => {
+    return await getPizzaById(id);
+  }
+);
+
 export interface PizzaState {
   categories: ICategory[];
   catLoading: TStatus;
   pizzas: IPizza[];
   pizzaLoading: TStatus;
   totalCount: number;
+  active: IPizza | null;
 }
 
 const initialState: PizzaState = {
@@ -37,12 +46,18 @@ const initialState: PizzaState = {
   pizzas: [],
   pizzaLoading: 'loading',
   totalCount: 0,
+  active: null,
 };
 
 const pizzaSlice = createSlice({
   name: 'pizza',
   initialState,
-  reducers: {},
+  reducers: {
+    resetActiveState: (state) => {
+      state.active = null;
+      state.pizzaLoading = 'loading';
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchCategories.pending, (state) => {
       state.catLoading = 'loading';
@@ -71,7 +86,29 @@ const pizzaSlice = createSlice({
       state.pizzas = [];
       state.totalCount = 0;
     });
+    builder.addCase(fetchPizzaById.pending, (state) => {
+      state.pizzaLoading = 'loading';
+      state.active = null;
+    });
+    builder.addCase(fetchPizzaById.fulfilled, (state, action) => {
+      state.pizzaLoading = 'success';
+      state.active = action.payload;
+    });
+    builder.addCase(fetchPizzaById.rejected, (state) => {
+      state.pizzaLoading = 'failed';
+      state.active = null;
+    });
   },
 });
+
+export const selectPizzaData = (state: RootState) => state.pizza;
+export const selectPizzaLoading = (state: RootState) =>
+  state.pizza.pizzaLoading;
+export const selectActivePizza = (state: RootState) => state.pizza.active;
+export const selectCategories = (state: RootState) => state.pizza.categories;
+export const selectCatLoading = (state: RootState) => state.pizza.catLoading;
+export const selectTotalCount = (state: RootState) => state.pizza.totalCount;
+
+export const { resetActiveState } = pizzaSlice.actions;
 
 export default pizzaSlice.reducer;

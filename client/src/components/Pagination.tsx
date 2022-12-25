@@ -1,13 +1,14 @@
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
-import { setCurrentPage } from '../store/slices/pageSlice';
+import { selectPageData, setCurrentPage } from '../store/slices/pageSlice';
+import { selectTotalCount } from '../store/slices/pizzaSlice';
 import classes from './Pagination.module.scss';
 
 const Pagination = () => {
   const dispatch = useAppDispatch();
-  const { limit, currentPage } = useAppSelector((state) => state.page);
-  const totalCount = useAppSelector((state) => state.pizza.totalCount);
+  const { limit, currentPage } = useAppSelector(selectPageData);
+  const totalCount = useAppSelector(selectTotalCount);
   const [searchParams, setSearchParams] = useSearchParams();
   const pagesCount = Math.ceil(totalCount / (limit || 6));
 

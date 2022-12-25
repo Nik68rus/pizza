@@ -1,3 +1,4 @@
+import { RootState } from './../index';
 import { IInCartItem, IToCartItem } from './../../types/index';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -58,6 +59,10 @@ const cartSlice = createSlice({
     },
   },
 });
+
+export const selectCartData = (state: RootState) => state.cart;
+export const selectCartitem = (id: string) => (state: RootState) =>
+  state.cart.items.find((item) => item.id === id);
 
 export const { addItem, removeItem, resetCart, deletePosition } =
   cartSlice.actions;

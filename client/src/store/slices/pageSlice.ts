@@ -1,3 +1,4 @@
+import { RootState } from './../index';
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
@@ -24,6 +25,8 @@ const pageSlice = createSlice({
     },
   },
 });
+
+export const selectPageData = (state: RootState) => state.page;
 
 export const { setLimit, setCurrentPage } = pageSlice.actions;
 

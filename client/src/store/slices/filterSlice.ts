@@ -1,3 +1,4 @@
+import { RootState } from './../index';
 import { ALL_CAT, SORTINGS } from './../../helpers/constants';
 import { ISorting, ICategory } from './../../types/index';
 import { createSlice } from '@reduxjs/toolkit';
@@ -32,5 +33,9 @@ const filterSlice = createSlice({
 });
 
 export const { setCategory, setSorting, setSearchTerm } = filterSlice.actions;
+
+export const selectFilterData = (state: RootState) => state.filter;
+export const selectCategory = (state: RootState) => state.filter.category;
+export const selectSortingId = (state: RootState) => state.filter.sorting.id;
 
 export default filterSlice.reducer;

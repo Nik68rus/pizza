@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { PIZZA_MIN_WIDTH } from '../helpers/constants';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
-import { setLimit } from '../store/slices/pageSlice';
-import { fetchPizzas } from '../store/slices/pizzaSlice';
+import { selectFilterData } from '../store/slices/filterSlice';
+import { selectPageData, setLimit } from '../store/slices/pageSlice';
+import { fetchPizzas, selectPizzaData } from '../store/slices/pizzaSlice';
 import PizzaItem from './PizzaItem';
 import PizzaSkeleton from './skeletons/PizzaSkeleton';
 
@@ -10,12 +11,9 @@ const PizzaList = () => {
   const gridRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
 
-  const { pizzas, pizzaLoading } = useAppSelector((state) => state.pizza);
-  const { sorting, category, searchTerm } = useAppSelector(
-    (state) => state.filter
-  );
-  const currentPage = useAppSelector((state) => state.page.currentPage);
-  const limit = useAppSelector((state) => state.page.limit);
+  const { pizzas, pizzaLoading } = useAppSelector(selectPizzaData);
+  const { sorting, category, searchTerm } = useAppSelector(selectFilterData);
+  const { currentPage, limit } = useAppSelector(selectPageData);
 
   const handleFetch = useCallback(() => {
     dispatch(

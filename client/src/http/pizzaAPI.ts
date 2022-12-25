@@ -9,6 +9,10 @@ interface IPizzaGetResponse {
   payload: { count: number; rows: IPizza[] };
 }
 
+interface IPizzaGetOneResponse {
+  payload: IPizza;
+}
+
 export const createPizza = async (pizza: IPizzaInput) => {
   const { data } = await api.post<IPizzaPostResponse>('/pizza', pizza);
   return data.payload;
@@ -32,5 +36,10 @@ export const getPizzas = async ({
       limit,
     },
   });
+  return data.payload;
+};
+
+export const getPizzaById = async (id: number) => {
+  const { data } = await api.get<IPizzaGetOneResponse>('/pizza/' + id);
   return data.payload;
 };

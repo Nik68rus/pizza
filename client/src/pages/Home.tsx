@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '../hooks/store';
 import { setCategory, setSorting } from '../store/slices/filterSlice';
 import { SORTINGS } from '../helpers/constants';
 import { setCurrentPage, setLimit } from '../store/slices/pageSlice';
+import { selectCategories } from '../store/slices/pizzaSlice';
 
 interface QueryParams {
   categoryId?: string;
@@ -20,7 +21,7 @@ interface QueryParams {
 
 const Home = () => {
   const dispatch = useAppDispatch();
-  const categories = useAppSelector((state) => state.pizza.categories);
+  const categories = useAppSelector(selectCategories);
 
   useEffect(() => {
     if (window.location.search) {

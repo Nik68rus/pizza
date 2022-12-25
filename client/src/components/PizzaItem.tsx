@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
-import { addItem } from '../store/slices/cartSlice';
+import { addItem, selectCartitem } from '../store/slices/cartSlice';
 import { IPizza } from '../types';
+import { RoutePath } from '../types/routes';
 
 const PizzaItem = ({ id, title, price, imageUrl, bases, sizes }: IPizza) => {
   const [activeBase, setActiveBase] = useState(bases[0]);
@@ -10,9 +12,7 @@ const PizzaItem = ({ id, title, price, imageUrl, bases, sizes }: IPizza) => {
   const cartItemId = `${id}-${activeBase}-${activeSize}`;
 
   const dispatch = useAppDispatch();
-  const cartItem = useAppSelector((state) =>
-    state.cart.items.find((item) => item.id === cartItemId)
-  );
+  const cartItem = useAppSelector(selectCartitem(cartItemId));
 
   const clickHandler = () => {
     dispatch(
@@ -29,8 +29,10 @@ const PizzaItem = ({ id, title, price, imageUrl, bases, sizes }: IPizza) => {
 
   return (
     <div className="pizza-block">
-      <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
-      <h4 className="pizza-block__title">{title}</h4>
+      <Link to={`${RoutePath.DETAILS}/${id}`}>
+        <img className="pizza-block__image" src={imageUrl} alt="Pizza" />
+        <h4 className="pizza-block__title">{title}</h4>
+      </Link>
       <div className="pizza-block__selector">
         <ul>
           {bases.map((base) => (

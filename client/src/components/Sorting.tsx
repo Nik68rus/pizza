@@ -3,13 +3,13 @@ import { useSearchParams } from 'react-router-dom';
 
 import { SORTINGS } from '../helpers/constants';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
-import { setSorting } from '../store/slices/filterSlice';
+import { selectSortingId, setSorting } from '../store/slices/filterSlice';
 import { ISorting } from '../types';
 import Select from './Select';
 
 const Sorting = () => {
   const dispatch = useAppDispatch();
-  const sortingId = useAppSelector((state) => state.filter.sorting.id);
+  const sortingId = useAppSelector(selectSortingId);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const sortClickHandler = useCallback(

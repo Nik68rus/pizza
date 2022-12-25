@@ -4,9 +4,10 @@ import CartIcon from './CartIcon';
 import { Link } from 'react-router-dom';
 import { RoutePath } from '../types/routes';
 import { useAppSelector } from '../hooks/store';
+import { selectCartData } from '../store/slices/cartSlice';
 
 const Header = () => {
-  const { totalPrice, totalQty } = useAppSelector((state) => state.cart);
+  const { totalPrice, totalQty } = useAppSelector(selectCartData);
 
   return (
     <div className="header">

@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 import CartItem from '../components/CartItem';
 import EmptyCart from '../components/EmptyCart';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
-import { resetCart } from '../store/slices/cartSlice';
+import { resetCart, selectCartData } from '../store/slices/cartSlice';
 import { RoutePath } from '../types/routes';
 
 const Cart = () => {
   const dispatch = useAppDispatch();
-  const { items, totalPrice, totalQty } = useAppSelector((state) => state.cart);
+  const { items, totalPrice, totalQty } = useAppSelector(selectCartData);
 
   const resetHandler = () => {
     dispatch(resetCart());

@@ -5,12 +5,17 @@ import Auth from '../pages/Auth';
 import Cart from '../pages/Cart';
 import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
+import PizzaDetails from '../pages/PizzaDetails';
 import { RoutePath } from '../types/routes';
 
 const AppRouter = () => {
   return (
     <Routes>
       <Route path={RoutePath.HOME} element={<Home />} />
+      <Route
+        path={`${RoutePath.DETAILS}/:pizzaId`}
+        element={<PizzaDetails />}
+      />
       <Route path={RoutePath.ADMIN} element={<Admin />} />
       <Route path={RoutePath.LOGIN} element={<Auth />} />
       <Route path={RoutePath.SIGNUP} element={<Auth />} />

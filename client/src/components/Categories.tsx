@@ -1,18 +1,22 @@
 import { useEffect } from 'react';
 import CategorySkeleton from './skeletons/CategorySkeleton';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
-import { setCategory } from '../store/slices/filterSlice';
+import { selectCategory, setCategory } from '../store/slices/filterSlice';
 import { setCurrentPage } from '../store/slices/pageSlice';
 import { ICategory } from '../types';
 import { useSearchParams } from 'react-router-dom';
-import { fetchCategories } from '../store/slices/pizzaSlice';
+import {
+  fetchCategories,
+  selectCategories,
+  selectCatLoading,
+} from '../store/slices/pizzaSlice';
 import { handleError } from '../helpers/error-handler';
 
 const Categories = () => {
   const dispatch = useAppDispatch();
-  const category = useAppSelector((state) => state.filter.category);
-  const categories = useAppSelector((state) => state.pizza.categories);
-  const catLoading = useAppSelector((state) => state.pizza.catLoading);
+  const category = useAppSelector(selectCategory);
+  const categories = useAppSelector(selectCategories);
+  const catLoading = useAppSelector(selectCatLoading);
 
   const [searchParams, setSearchParams] = useSearchParams();
 

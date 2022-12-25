@@ -1,8 +1,10 @@
 import React from 'react';
 import { FaMinus, FaPlus, FaTimes } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import { useAppDispatch } from '../hooks/store';
 import { addItem, deletePosition, removeItem } from '../store/slices/cartSlice';
 import { IInCartItem } from '../types';
+import { RoutePath } from '../types/routes';
 
 interface Props {
   item: IInCartItem;
@@ -26,11 +28,13 @@ const CartItem = ({ item }: Props) => {
   return (
     <div className="cart__item">
       <div className="cart__item-img">
-        <img
-          className="pizza-block__image"
-          src={item.imageUrl}
-          alt={item.title}
-        />
+        <Link to={`${RoutePath.DETAILS}/${item.id.split('-')[0]}`}>
+          <img
+            className="pizza-block__image"
+            src={item.imageUrl}
+            alt={item.title}
+          />
+        </Link>
       </div>
       <div className="cart__item-info">
         <h3>{item.title}</h3>

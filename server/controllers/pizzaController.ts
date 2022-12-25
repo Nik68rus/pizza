@@ -90,6 +90,24 @@ class PizzaController {
     }
   }
 
+  async getPizzaById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { pizzaId } = req.params;
+
+      const item = await Pizza.findByPk(pizzaId);
+
+      if (!item) {
+        return next(ApiError.notFound('Страница не найдена!'));
+      }
+
+      return res.status(200).json({ payload: item });
+    } catch (error) {
+      return next(
+        ApiError.internal('Ошибка при работе с БД. Повторите позднее!')
+      );
+    }
+  }
+
   async postPizza(req: PostPizzaRequest, res: Response, next: NextFunction) {
     const { title, imageUrl, categoryId, sizes, bases, price } = req.body;
 
