@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaMinus, FaPlus, FaTimes } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import cx from 'classnames';
 import { useAppDispatch } from '../hooks/store';
 import { addItem, deletePosition, removeItem } from '../store/slices/cartSlice';
 import { IInCartItem } from '../types';
@@ -44,7 +45,11 @@ const CartItem = ({ item }: Props) => {
       </div>
       <div className="cart__item-count">
         <button
-          className="button button--outline button--circle cart__item-count-minus"
+          disabled={item.qty < 2}
+          className={cx(
+            'button button--outline button--circle cart__item-count-minus',
+            { 'button--disabled': item.qty < 2 }
+          )}
           aria-label="Убрать одну"
           onClick={decHandler}
         >

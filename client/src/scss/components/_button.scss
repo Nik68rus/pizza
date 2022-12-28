@@ -88,6 +88,12 @@
     }
   }
 
+  &--disabled {
+    pointer-events: none;
+    filter: grayscale(0.7);
+    opacity: 0.5;
+  }
+
   &__delimiter {
     width: 1px;
     height: 25px;

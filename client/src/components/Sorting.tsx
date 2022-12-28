@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { SORTINGS } from '../helpers/constants';
@@ -7,10 +7,12 @@ import { selectSortingId, setSorting } from '../store/slices/filterSlice';
 import { ISorting } from '../types';
 import Select from './Select';
 
-const Sorting = () => {
+const Sorting = React.memo(() => {
   const dispatch = useAppDispatch();
   const sortingId = useAppSelector(selectSortingId);
   const [searchParams, setSearchParams] = useSearchParams();
+
+  console.log('Sorting');
 
   const sortClickHandler = useCallback(
     (item: ISorting) => {
@@ -35,6 +37,6 @@ const Sorting = () => {
       selected={sortingId}
     />
   );
-};
+});
 
 export default Sorting;

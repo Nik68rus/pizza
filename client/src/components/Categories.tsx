@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import CategorySkeleton from './skeletons/CategorySkeleton';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
 import { selectCategory, setCategory } from '../store/slices/filterSlice';
@@ -12,7 +12,7 @@ import {
 } from '../store/slices/pizzaSlice';
 import { handleError } from '../helpers/error-handler';
 
-const Categories = () => {
+const Categories = React.memo(() => {
   const dispatch = useAppDispatch();
   const category = useAppSelector(selectCategory);
   const categories = useAppSelector(selectCategories);
@@ -71,6 +71,6 @@ const Categories = () => {
       ) : null}
     </div>
   );
-};
+});
 
 export default Categories;

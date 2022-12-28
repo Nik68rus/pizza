@@ -7,12 +7,15 @@ export interface IPizzaInput {
   price: number;
 }
 
-export type TSortingOrder = 'asc' | 'desc';
+export enum SortingOrder {
+  ASC = 'asc',
+  DESC = 'desc',
+}
 export interface ISorting {
   id: number;
   title: string;
   property: string;
-  order: TSortingOrder;
+  order: SortingOrder;
 }
 
 export interface IPizza {
@@ -44,12 +47,16 @@ export interface IInCartItem extends IToCartItem {
   qty: number;
 }
 
-export type TStatus = 'loading' | 'success' | 'failed';
+export enum Status {
+  LOADING = 'loading',
+  SUCCESS = 'success',
+  FAILED = 'failed',
+}
 
 export interface PizzaFetchParams {
   categoryId: number;
   sortingProperty: string;
-  sortingOrder: TSortingOrder;
+  sortingOrder: SortingOrder;
   searchTerm: string;
   page: number;
   limit: number;
