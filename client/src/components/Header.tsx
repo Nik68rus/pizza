@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import logoSvg from '../assets/img/pizza-logo.svg';
-import CartIcon from './CartIcon';
+import { CartIcon } from '.';
 import { Link } from 'react-router-dom';
 import { RoutePath } from '../types/routes';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
@@ -11,25 +11,17 @@ const Header = () => {
   const isMounted = useRef(false);
   const dispatch = useAppDispatch();
 
-  console.log('header render');
-
   useEffect(() => {
     if (isMounted.current) {
-      console.log(1);
-
       const lsCart = {
         items,
         totalPrice,
         totalQty,
       };
       const cartString = JSON.stringify(lsCart);
-      // console.log(cartString);
       localStorage.setItem('cart', cartString);
     } else {
-      console.log(2);
-
       const cart = JSON.parse(localStorage.getItem('cart') || '');
-      console.log(cart);
       dispatch(setCart(cart));
 
       isMounted.current = true;

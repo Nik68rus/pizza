@@ -5,14 +5,12 @@ import { SORTINGS } from '../helpers/constants';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
 import { selectSortingId, setSorting } from '../store/slices/filterSlice';
 import { ISorting } from '../types';
-import Select from './Select';
+import { Select } from '.';
 
 const Sorting = React.memo(() => {
   const dispatch = useAppDispatch();
   const sortingId = useAppSelector(selectSortingId);
   const [searchParams, setSearchParams] = useSearchParams();
-
-  console.log('Sorting');
 
   const sortClickHandler = useCallback(
     (item: ISorting) => {

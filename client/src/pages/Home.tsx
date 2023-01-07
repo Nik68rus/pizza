@@ -1,15 +1,17 @@
 import { useEffect } from 'react';
 import qs from 'qs';
-import Categories from '../components/Categories';
-import Search from '../components/Search';
-import Pagination from '../components/Pagination';
-import PizzaList from '../components/PizzaList';
-import Sorting from '../components/Sorting';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
 import { setCategory, setSorting } from '../store/slices/filterSlice';
 import { SORTINGS } from '../helpers/constants';
 import { setCurrentPage, setLimit } from '../store/slices/pageSlice';
 import { selectCategories } from '../store/slices/pizzaSlice';
+import {
+  Categories,
+  Search,
+  Pagination,
+  PizzaList,
+  Sorting,
+} from '../components';
 
 interface QueryParams {
   categoryId?: string;

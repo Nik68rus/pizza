@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
 import { selectPageData, setCurrentPage } from '../store/slices/pageSlice';

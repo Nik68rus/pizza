@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import CategorySkeleton from './skeletons/CategorySkeleton';
+import React, { useEffect, useCallback } from 'react';
+import { CategorySkeleton } from '.';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
 import { selectCategory, setCategory } from '../store/slices/filterSlice';
 import { setCurrentPage } from '../store/slices/pageSlice';
@@ -32,19 +32,22 @@ const Categories = React.memo(() => {
     }
   }, [catLoading]);
 
-  const clickHandler = (cat: ICategory) => {
-    dispatch(setCategory(cat));
-    dispatch(setCurrentPage(1));
+  const clickHandler = useCallback(
+    (cat: ICategory) => {
+      dispatch(setCategory(cat));
+      dispatch(setCurrentPage(1));
 
-    searchParams.delete('limit');
-    searchParams.delete('page');
-    if (cat.id !== 0) {
-      searchParams.set('categoryId', cat.id.toString());
-    } else {
-      searchParams.delete('categoryId');
-    }
-    setSearchParams(searchParams);
-  };
+      searchParams.delete('limit');
+      searchParams.delete('page');
+      if (cat.id !== 0) {
+        searchParams.set('categoryId', cat.id.toString());
+      } else {
+        searchParams.delete('categoryId');
+      }
+      setSearchParams(searchParams);
+    },
+    [dispatch, setSearchParams, searchParams]
+  );
 
   return (
     <div className="categories">

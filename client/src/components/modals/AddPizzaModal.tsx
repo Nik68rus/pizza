@@ -101,8 +101,6 @@ const AddPizzaModal = ({ onClose, heading, onSubmit }: Props) => {
   const formSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const isValid = validatePizza(pizza);
-    console.log(isValid);
-    console.log(invalidInputs);
 
     if (isValid) {
       onSubmit(pizza);

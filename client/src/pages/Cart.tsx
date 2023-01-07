@@ -1,8 +1,7 @@
 import React from 'react';
 import { FaCartPlus, FaTrashAlt, FaArrowLeft } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import CartItem from '../components/CartItem';
-import EmptyCart from '../components/EmptyCart';
+import { CartItem, EmptyCart } from '../components';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
 import { resetCart, selectCartData } from '../store/slices/cartSlice';
 import { RoutePath } from '../types/routes';

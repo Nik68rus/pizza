@@ -4,8 +4,7 @@ import { useAppDispatch, useAppSelector } from '../hooks/store';
 import { selectFilterData } from '../store/slices/filterSlice';
 import { selectPageData, setLimit } from '../store/slices/pageSlice';
 import { fetchPizzas, selectPizzaData } from '../store/slices/pizzaSlice';
-import PizzaItem from './PizzaItem';
-import PizzaSkeleton from './skeletons/PizzaSkeleton';
+import { PizzaItem, PizzaSkeleton } from '.';
 
 const PizzaList = () => {
   const gridRef = useRef<HTMLDivElement>(null);

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import AddCategoryModal from '../components/modals/AddCategoryModal';
-import AddPizzaModal from '../components/modals/AddPizzaModal';
+import { AddCategoryModal, AddPizzaModal } from '../components';
 import { handleError } from '../helpers/error-handler';
 import { createCategory } from '../http/categoryAPI';
 import { createPizza } from '../http/pizzaAPI';
@@ -17,7 +16,6 @@ const Admin = () => {
   const [addCategoryVisible, setAddCategoryVisible] = useState(false);
 
   const addPizzaHandler = async (pizza: IPizzaInput) => {
-    console.log('Add pizza submit');
     try {
       await createPizza(pizza);
       toast.success('Пицца добавлена');
