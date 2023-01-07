@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import { Pizza } from './../models/index';
+import { Pizza } from '../models/pizza';
 import { IPizzaInput } from './../../client/src/types/index';
 import { Request, Response, NextFunction } from 'express';
 import ApiError from '../helpers/error';

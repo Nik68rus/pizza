@@ -1,4 +1,4 @@
-import { TBaseType } from './../types/index';
+import { TBaseType } from '../types/index';
 import sequelize from '../db';
 import {
   DataTypes,

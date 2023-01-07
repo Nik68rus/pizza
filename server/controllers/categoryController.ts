@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import ApiError from '../helpers/error';
-import { Category } from '../models';
+import { Category } from '../models/pizza';
 
 interface CategoryRequest extends Request {
   body: {

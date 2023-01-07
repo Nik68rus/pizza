@@ -114,3 +114,16 @@
     margin-right: 10px;
   }
 }
+
+.form__hint {
+  position: absolute;
+  top: 100%;
+  left: 20px;
+  font-size: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+  .form__control:focus-within & {
+    opacity: 1;
+  }
+}
