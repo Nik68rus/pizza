@@ -14,9 +14,7 @@ class CategoryController {
       const categories = await Category.findAll();
       return res.status(200).json({ payload: categories });
     } catch (error) {
-      return next(
-        ApiError.internal('Ошибка при работе с БД. Повторите позднее!')
-      );
+      return next(error);
     }
   }
 
@@ -40,10 +38,8 @@ class CategoryController {
       const category = await Category.create({ title });
 
       return res.status(200).json({ payload: category });
-    } catch (err) {
-      return next(
-        ApiError.internal('Ошибка при работе с БД. Повторите позднее!')
-      );
+    } catch (error) {
+      return next(error);
     }
   }
 }

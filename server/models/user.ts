@@ -40,6 +40,7 @@ export const User = sequelize.define<User>('user', {
   activationLink: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: true,
   },
   isActivated: {
     type: DataTypes.BOOLEAN,

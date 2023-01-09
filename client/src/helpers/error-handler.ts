@@ -9,7 +9,7 @@ export const handleError = (error: any, id?: Id) => {
   }
   if (!toast.isActive(id)) {
     if (error instanceof AxiosError) {
-      toast.error(error.response?.data || defaultError, {
+      toast.error(error.response?.data.message || defaultError, {
         toastId: id,
         autoClose: 2000,
       });

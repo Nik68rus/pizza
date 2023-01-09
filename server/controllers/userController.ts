@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import uuid from 'uuid';
-import { IUserData } from './../../client/src/types/user';
+import { IUserRegData } from './../../client/src/types/user';
 import { Request, Response, NextFunction } from 'express';
 import { User } from '../models/user';
 import ApiError from '../helpers/error';
@@ -10,7 +10,14 @@ import tokenService from '../service/token-service';
 import userService from '../service/user-service';
 
 interface SigninRequest extends Request {
-  body: IUserData;
+  body: IUserRegData;
+}
+
+interface LoginRequest extends Request {
+  body: {
+    email: string;
+    password: string;
+  };
 }
 
 class UserController {
@@ -42,17 +49,60 @@ class UserController {
       });
       return res.json(userData);
     } catch (error) {
-      return next(
-        ApiError.internal('Ошибка при работе с БД. Повторите позднее!')
-      );
+      next(error);
     }
   }
 
-  async postLogin(req: Request, res: Response, next: NextFunction) {}
+  async postLogin(req: LoginRequest, res: Response, next: NextFunction) {
+    const { email, password } = req.body;
+    try {
+      const userData = await userService.login(email, password);
+      res.cookie('refreshToken', userData.refreshToken, {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      });
+      return res.json(userData);
+    } catch (error) {
+      next(error);
+    }
+  }
 
-  async postLogout(req: Request, res: Response, next: NextFunction) {}
+  async postLogout(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { refreshToken } = req.cookies;
+      console.log(refreshToken);
 
-  async getActivate(req: Request, res: Response, next: NextFunction) {}
+      const success = await userService.logout(refreshToken);
+      if (success) {
+        res.clearCookie('refreshToken');
+        return res.status(200).json({ message: 'Logout success!' });
+      } else {
+        next(ApiError.internal('Что-то пошло не так!'));
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getActivate(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { link } = req.params;
+      const user = await userService.activate(link);
+      if (user) {
+        res.redirect(
+          `${process.env.APP_URL as string}/activation?success=${
+            user.isActivated
+          }&mail=${user.email}`
+        );
+      } else {
+        res.redirect(
+          `${process.env.APP_URL as string}/activation?success=false`
+        );
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
 
   async getRefresh(req: Request, res: Response, next: NextFunction) {}
 

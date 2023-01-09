@@ -1,9 +1,12 @@
 import jwt from 'jsonwebtoken';
+import ApiError from '../helpers/error';
 import { Token } from '../models/user';
 
 interface TokenPayload {
+  id: number;
   email: string;
   name: string;
+  isActivated: boolean;
 }
 
 class TokenService {
@@ -38,6 +41,18 @@ class TokenService {
 
     const token = await Token.create({ userId, refreshToken });
     return token;
+  }
+
+  async removeToken(refreshToken: string) {
+    const token = await Token.findOne({ where: { refreshToken } });
+
+    if (!token) {
+      throw ApiError.notFound('Что-то пошло не так! Попробуйте позднее!');
+    }
+
+    await token.destroy();
+
+    return true;
   }
 }
 

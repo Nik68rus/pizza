@@ -1,3 +1,5 @@
+import { NextFunction } from 'express';
+
 class ApiError extends Error {
   status: number;
 
@@ -31,5 +33,19 @@ class ApiError extends Error {
     return new ApiError(500, message);
   }
 }
+
+export const handleError = (error: any, next: NextFunction) => {
+  console.log(error);
+  let message: string;
+  if (error instanceof Error) {
+    message = error.message;
+  } else if (typeof error === 'string') {
+    message = error;
+  } else {
+    message = 'Ошибка сервера. Повторите позднее!';
+  }
+
+  return next(ApiError.internal(message));
+};
 
 export default ApiError;

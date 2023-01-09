@@ -6,6 +6,7 @@ import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
 import { RoutePath } from '../types/routes';
 import { Spinner } from '.';
+import Activation from '../pages/Activation';
 
 const Cart = React.lazy(
   () => import(/* webpackChunkName: "Cart" */ '../pages/Cart')
@@ -26,6 +27,7 @@ const AppRouter = () => {
         <Route path={RoutePath.ADMIN} element={<Admin />} />
         <Route path={RoutePath.LOGIN} element={<Auth />} />
         <Route path={RoutePath.SIGNUP} element={<Auth />} />
+        <Route path={RoutePath.ACTIVATION} element={<Activation />} />
         <Route path={RoutePath.CART} element={<Cart />} />
         <Route path={'*'} element={<NotFound />} />
       </Routes>

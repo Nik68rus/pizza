@@ -5,11 +5,17 @@ import { Link } from 'react-router-dom';
 import { RoutePath } from '../types/routes';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
 import { selectCartData, setCart } from '../store/slices/cartSlice';
+import { logoutUser } from '../http/userAPI';
 
 const Header = () => {
   const { items, totalPrice, totalQty } = useAppSelector(selectCartData);
   const isMounted = useRef(false);
   const dispatch = useAppDispatch();
+
+  const logOutHandler = async () => {
+    const result = await logoutUser();
+    console.log(result);
+  };
 
   useEffect(() => {
     if (isMounted.current) {
@@ -47,6 +53,9 @@ const Header = () => {
           <Link to={RoutePath.LOGIN} className="button">
             Войти
           </Link>
+          <button className="button" onClick={logOutHandler}>
+            Выйти
+          </button>
           <div className="header__cart">
             <Link to={RoutePath.CART} className="button button--cart">
               <span>{totalPrice} ₽</span>

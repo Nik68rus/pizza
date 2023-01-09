@@ -1,22 +1,28 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import isEmail from 'validator/lib/isEmail';
 import { handleError } from '../helpers/error-handler';
-import { createUser } from '../http/userAPI';
+import { createUser, loginUser } from '../http/userAPI';
 import { RoutePath } from '../types/routes';
-import { IUserData } from '../types/user';
+import { IUserRegData } from '../types/user';
 
 const Auth = () => {
   const location = useLocation();
-  const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const user = params.get('user');
   const isLogin = location.pathname === RoutePath.LOGIN;
   const [isValid, setIsValid] = useState(false);
-  const [formData, setFormData] = useState<IUserData>({
-    email: '',
+  const [activationNeeded, setActivationNeeded] = useState(false);
+
+  const initialState: IUserRegData = {
+    email: user && isLogin ? user : '',
     name: '',
     password: '',
     password2: '',
-  });
+  };
+
+  const [formData, setFormData] = useState<IUserRegData>(initialState);
 
   const { email, name, password, password2 } = formData;
 
@@ -32,15 +38,32 @@ const Auth = () => {
   ) => {
     e.preventDefault();
     try {
-      await createUser(formData);
-      navigate(RoutePath.LOGIN);
+      const userData = await createUser(formData);
+      toast.success(
+        `Пользователь ${userData.name} успешно зарегистрирован. Для полноценной работы активируйте аккаунт по ссылке, отправленной на почту ${userData.email}!`
+      );
+      setActivationNeeded(true);
     } catch (error) {
       handleError(error);
     }
   };
 
-  const loginSubmitHandler: React.FormEventHandler<HTMLFormElement> = (e) => {
+  const loginSubmitHandler: React.FormEventHandler<HTMLFormElement> = async (
+    e
+  ) => {
     e.preventDefault();
+    try {
+      const userData = await loginUser({
+        email: formData.email,
+        password: formData.password,
+      });
+      console.log(userData);
+      document.cookie = `refreshToken=${userData.refreshToken};`;
+
+      localStorage.setItem('accesToken', userData.accessToken);
+    } catch (error) {
+      handleError(error);
+    }
     console.log(formData);
   };
 
@@ -64,6 +87,29 @@ const Auth = () => {
       }
     }
   }, [isLogin, email, name, password, password2]);
+
+  if (activationNeeded) {
+    return (
+      <div className="content">
+        <div className="container">
+          <h2 className="content__title">Активация учетной записи</h2>
+          <p>
+            Создан аккаунт для пользователя {formData.name}. Активируйте учетную
+            записи по ссылке в письме, отправленном на вашу электронную почту{' '}
+            {formData.email}
+          </p>
+          <div className="content__actions">
+            <Link to={RoutePath.HOME} className="button">
+              На главную
+            </Link>
+            <Link to={RoutePath.LOGIN} className="button">
+              Войти
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="content">

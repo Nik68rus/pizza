@@ -84,9 +84,7 @@ class PizzaController {
 
       return res.status(200).json({ payload: items });
     } catch (error) {
-      return next(
-        ApiError.internal('Ошибка при работе с БД. Повторите позднее!')
-      );
+      return next(error);
     }
   }
 
@@ -102,9 +100,7 @@ class PizzaController {
 
       return res.status(200).json({ payload: item });
     } catch (error) {
-      return next(
-        ApiError.internal('Ошибка при работе с БД. Повторите позднее!')
-      );
+      return next(error);
     }
   }
 
@@ -133,9 +129,7 @@ class PizzaController {
       });
       return res.status(201).json({ payload: pizza });
     } catch (error) {
-      return next(
-        ApiError.internal('Ошибка при работе с БД. Повторите позднее!')
-      );
+      return next(error);
     }
   }
 }

@@ -9,6 +9,12 @@ declare global {
       readonly DB_PORT: string;
       readonly JWT_ACCESS_SECRET: string;
       readonly JWT_REFRESH_SECRET: string;
+      readonly MAIL_USER: string;
+      readonly MAIL_PASSWORD: string;
+      readonly MAIL_HOST: string;
+      readonly MAIL_PORT: string;
+      readonly API_URL: string;
+      readonly APP_URL: string;
     }
   }
 }
