@@ -5,16 +5,24 @@ import { Link } from 'react-router-dom';
 import { RoutePath } from '../types/routes';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
 import { selectCartData, setCart } from '../store/slices/cartSlice';
-import { logoutUser } from '../http/userAPI';
+import {
+  logout,
+  selectAuthStatus,
+  selectUserData,
+} from '../store/slices/userSlice';
+import { deleteCookie } from '../helpers/cookie';
 
 const Header = () => {
   const { items, totalPrice, totalQty } = useAppSelector(selectCartData);
   const isMounted = useRef(false);
   const dispatch = useAppDispatch();
+  const isAuthenticated = useAppSelector(selectAuthStatus);
+  const { isAdmin } = useAppSelector(selectUserData);
 
   const logOutHandler = async () => {
-    const result = await logoutUser();
-    console.log(result);
+    dispatch(logout());
+    localStorage.removeItem('accessToken');
+    deleteCookie('refreshToken');
   };
 
   useEffect(() => {
@@ -47,15 +55,20 @@ const Header = () => {
           </div>
         </Link>
         <div className="header__controls">
-          <Link to={RoutePath.ADMIN} className="button">
-            Администрирование
-          </Link>
-          <Link to={RoutePath.LOGIN} className="button">
-            Войти
-          </Link>
-          <button className="button" onClick={logOutHandler}>
-            Выйти
-          </button>
+          {isAdmin && (
+            <Link to={RoutePath.ADMIN} className="button">
+              Администрирование
+            </Link>
+          )}
+          {!isAuthenticated ? (
+            <Link to={RoutePath.LOGIN} className="button">
+              Войти
+            </Link>
+          ) : (
+            <button className="button" onClick={logOutHandler}>
+              Выйти
+            </button>
+          )}
           <div className="header__cart">
             <Link to={RoutePath.CART} className="button button--cart">
               <span>{totalPrice} ₽</span>

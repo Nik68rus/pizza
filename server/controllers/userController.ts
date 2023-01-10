@@ -9,7 +9,7 @@ import mailService from '../service/mail-service';
 import tokenService from '../service/token-service';
 import userService from '../service/user-service';
 
-interface SigninRequest extends Request {
+interface SignupRequest extends Request {
   body: IUserRegData;
 }
 
@@ -20,8 +20,14 @@ interface LoginRequest extends Request {
   };
 }
 
+interface ExtendedRequest extends Request {
+  cookies: {
+    refreshToken: string;
+  };
+}
+
 class UserController {
-  async postSignup(req: SigninRequest, res: Response, next: NextFunction) {
+  async postSignup(req: SignupRequest, res: Response, next: NextFunction) {
     const { email, name, password, password2 } = req.body;
     const normEmail = email.toLowerCase().trim();
     const normName = name.trim();
@@ -67,7 +73,7 @@ class UserController {
     }
   }
 
-  async postLogout(req: Request, res: Response, next: NextFunction) {
+  async postLogout(req: ExtendedRequest, res: Response, next: NextFunction) {
     try {
       const { refreshToken } = req.cookies;
       console.log(refreshToken);
@@ -77,7 +83,7 @@ class UserController {
         res.clearCookie('refreshToken');
         return res.status(200).json({ message: 'Logout success!' });
       } else {
-        next(ApiError.internal('Что-то пошло не так!'));
+        return next(ApiError.internal('Что-то пошло не так!'));
       }
     } catch (error) {
       next(error);
@@ -104,10 +110,27 @@ class UserController {
     }
   }
 
-  async getRefresh(req: Request, res: Response, next: NextFunction) {}
+  async getRefresh(req: ExtendedRequest, res: Response, next: NextFunction) {
+    try {
+      const { refreshToken } = req.cookies;
+      const userData = await userService.refresh(refreshToken);
+      res.cookie('refreshToken', userData.refreshToken, {
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      });
+      return res.json(userData);
+    } catch (error) {
+      next(error);
+    }
+  }
 
   async getUsers(req: Request, res: Response, next: NextFunction) {
-    res.json({ list: [1, 2, 3, 4], message: 'List of users' });
+    try {
+      const users = await userService.getAllUsers();
+      return res.json(users);
+    } catch (error) {
+      next(error);
+    }
   }
 }
 

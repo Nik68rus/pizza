@@ -1,11 +1,12 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import ApiError from '../helpers/error';
 import { Token } from '../models/user';
 
-interface TokenPayload {
+export interface TokenPayload {
   id: number;
   email: string;
   name: string;
+  isAdmin: boolean;
   isActivated: boolean;
 }
 
@@ -53,6 +54,38 @@ class TokenService {
     await token.destroy();
 
     return true;
+  }
+
+  async validateAccessToken(token: string) {
+    try {
+      const userData = jwt.verify(
+        token,
+        process.env.JWT_ACCESS_SECRET as string
+      ) as TokenPayload;
+      return userData;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async validateRefereshToken(token: string) {
+    try {
+      const userData = jwt.verify(
+        token,
+        process.env.JWT_REFRESH_SECRET as string
+      ) as TokenPayload;
+      return userData;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async findToken(token: string) {
+    try {
+      return await Token.findOne({ where: { refreshToken: token } });
+    } catch (error) {
+      return null;
+    }
   }
 }
 

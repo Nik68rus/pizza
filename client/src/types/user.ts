@@ -13,6 +13,8 @@ export interface IUserLoginData {
 export interface IUserAuthData {
   email: string;
   name: string;
+  isAdmin: boolean;
+  isActivated: boolean;
   accessToken: string;
   refreshToken: string;
 }

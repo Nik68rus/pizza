@@ -3,11 +3,32 @@ import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid';
 import { IUserAuthData } from '../../client/src/types/user';
 import ApiError from '../helpers/error';
-import { User } from '../models/user';
+import { User, IUser } from '../models/user';
 import mailService from './mail-service';
 import tokenService from './token-service';
 
 class UserService {
+  async generateUserData(user: IUser) {
+    const tokens = tokenService.generateTokens({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      isAdmin: user.isAdmin,
+      isActivated: user.isActivated,
+    });
+
+    await tokenService.saveTokens(user.id, tokens.refreshToken);
+
+    const result: IUserAuthData = {
+      email: user.email,
+      name: user.name,
+      isAdmin: user.isAdmin,
+      isActivated: user.isActivated,
+      ...tokens,
+    };
+    return result;
+  }
+
   async signup(email: string, password: string, name: string) {
     const existingUser = await User.findOne({ where: { email } });
 
@@ -32,21 +53,7 @@ class UserService {
       `${process.env.API_URL}/api/user/activate/${activationLink}`
     );
 
-    const tokens = tokenService.generateTokens({
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      isActivated: user.isActivated,
-    });
-
-    await tokenService.saveTokens(user.id, tokens.refreshToken);
-
-    const result: IUserAuthData = {
-      email: user.email,
-      name: user.name,
-      ...tokens,
-    };
-    return result;
+    return this.generateUserData(user);
   }
 
   async activate(activationLink: string) {
@@ -77,21 +84,7 @@ class UserService {
     const isMatching = await bcrypt.compare(password, user.password);
 
     if (isMatching) {
-      const tokens = tokenService.generateTokens({
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        isActivated: user.isActivated,
-      });
-
-      await tokenService.saveTokens(user.id, tokens.refreshToken);
-
-      const result: IUserAuthData = {
-        email: user.email,
-        name: user.name,
-        ...tokens,
-      };
-      return result;
+      return this.generateUserData(user);
     } else {
       throw ApiError.notAuthenticated('Неверное имя пользователя или пароль!');
     }
@@ -100,6 +93,31 @@ class UserService {
   async logout(refreshToken: string) {
     const result = await tokenService.removeToken(refreshToken);
     return result;
+  }
+
+  async refresh(refreshToken: string) {
+    if (!refreshToken) {
+      throw ApiError.notAuthenticated('Пользователь не авторизован!');
+    }
+
+    const userData = await tokenService.validateRefereshToken(refreshToken);
+    const tokenFromDb = await tokenService.findToken(refreshToken);
+
+    if (!userData || !tokenFromDb) {
+      throw ApiError.notAuthenticated('Пользователь не авторизован');
+    }
+
+    const user = await User.findByPk(userData.id);
+    if (user) {
+      return this.generateUserData(user);
+    } else {
+      throw ApiError.notFound('Пользователь не найден!');
+    }
+  }
+
+  async getAllUsers() {
+    const users = await User.findAll();
+    return users;
   }
 }
 

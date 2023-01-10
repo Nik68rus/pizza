@@ -1,3 +1,4 @@
+import { IUser } from './../../../server/models/user';
 import { IUserRegData, IUserAuthData, IUserLoginData } from './../types/user';
 import { api } from '.';
 
@@ -14,16 +15,23 @@ export const createUser = async (userData: IUserRegData) => {
 
 export const loginUser = async (userData: IUserLoginData) => {
   const { email, password } = userData;
-  const { data } = await api.post<IUserAuthData>('/user/login', {
+  const response = await api.post<IUserAuthData>('/user/login', {
     email: email.toLowerCase().trim(),
     password: password.trim(),
   });
-  return data;
+  console.log(response);
+
+  return response;
 };
 
 export const logoutUser = async () => {
   const { data } = await api.post<string>('/user/logout', null, {
     withCredentials: true,
   });
+  return data;
+};
+
+export const fetchUsers = async () => {
+  const { data } = await api.get<IUser[]>('/user/list');
   return data;
 };

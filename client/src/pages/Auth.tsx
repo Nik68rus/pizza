@@ -3,11 +3,15 @@ import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import isEmail from 'validator/lib/isEmail';
 import { handleError } from '../helpers/error-handler';
-import { createUser, loginUser } from '../http/userAPI';
+import { useAppDispatch, useAppSelector } from '../hooks/store';
+import { createUser } from '../http/userAPI';
+import { login, selectUserData } from '../store/slices/userSlice';
 import { RoutePath } from '../types/routes';
 import { IUserRegData } from '../types/user';
 
 const Auth = () => {
+  const dispatch = useAppDispatch();
+  const userData = useAppSelector(selectUserData);
   const location = useLocation();
   const [params] = useSearchParams();
   const user = params.get('user');
@@ -52,19 +56,12 @@ const Auth = () => {
     e
   ) => {
     e.preventDefault();
-    try {
-      const userData = await loginUser({
+    dispatch(
+      login({
         email: formData.email,
         password: formData.password,
-      });
-      console.log(userData);
-      document.cookie = `refreshToken=${userData.refreshToken};`;
-
-      localStorage.setItem('accesToken', userData.accessToken);
-    } catch (error) {
-      handleError(error);
-    }
-    console.log(formData);
+      })
+    );
   };
 
   useEffect(() => {
@@ -87,6 +84,11 @@ const Auth = () => {
       }
     }
   }, [isLogin, email, name, password, password2]);
+
+  useEffect(() => {
+    document.cookie = `refreshToken=${userData.refreshToken};`;
+    localStorage.setItem('accessToken', userData.accessToken);
+  }, [userData.refreshToken, userData.accessToken]);
 
   if (activationNeeded) {
     return (

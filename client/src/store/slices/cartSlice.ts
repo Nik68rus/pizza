@@ -58,9 +58,9 @@ const cartSlice = createSlice({
       state.totalQty = 0;
     },
     setCart: (state, action: PayloadAction<CartState>) => {
-      state.items = action.payload.items;
-      state.totalPrice = action.payload.totalPrice;
-      state.totalQty = action.payload.totalQty;
+      state.items = action.payload.items || initialState.items;
+      state.totalPrice = action.payload.totalPrice || initialState.totalPrice;
+      state.totalQty = action.payload.totalQty || initialState.totalQty;
     },
   },
 });

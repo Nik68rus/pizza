@@ -7,8 +7,8 @@ import {
   InferCreationAttributes,
 } from 'sequelize';
 
-interface User
-  extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
+export interface IUser
+  extends Model<InferAttributes<IUser>, InferCreationAttributes<IUser>> {
   id: CreationOptional<number>;
   email: string;
   password: string;
@@ -18,7 +18,7 @@ interface User
   isAdmin: CreationOptional<boolean>;
 }
 
-export const User = sequelize.define<User>('user', {
+export const User = sequelize.define<IUser>('user', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
