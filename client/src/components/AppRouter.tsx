@@ -6,7 +6,8 @@ import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
 import { RoutePath } from '../types/routes';
 import { Spinner } from '.';
-import Activation from '../pages/Activation';
+import Profile from '../pages/Profile';
+import PrivateRoute from './PrivateRoute';
 
 const Cart = React.lazy(
   () => import(/* webpackChunkName: "Cart" */ '../pages/Cart')
@@ -24,10 +25,15 @@ const AppRouter = () => {
           path={`${RoutePath.DETAILS}/:pizzaId`}
           element={<PizzaDetails />}
         />
-        <Route path={RoutePath.ADMIN} element={<Admin />} />
+        <Route path={RoutePath.ADMIN} element={<PrivateRoute admin={true} />}>
+          <Route path={RoutePath.ADMIN} element={<Admin />} />
+        </Route>
+        <Route path={RoutePath.PROFILE} element={<PrivateRoute />}>
+          <Route path={RoutePath.PROFILE} element={<Profile />} />
+        </Route>
         <Route path={RoutePath.LOGIN} element={<Auth />} />
         <Route path={RoutePath.SIGNUP} element={<Auth />} />
-        <Route path={RoutePath.ACTIVATION} element={<Activation />} />
+        <Route path={RoutePath.PROFILE} element={<Profile />} />
         <Route path={RoutePath.CART} element={<Cart />} />
         <Route path={'*'} element={<NotFound />} />
       </Routes>

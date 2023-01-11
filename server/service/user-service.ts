@@ -99,9 +99,13 @@ class UserService {
     if (!refreshToken) {
       throw ApiError.notAuthenticated('Пользователь не авторизован!');
     }
+    console.log(refreshToken);
 
     const userData = await tokenService.validateRefereshToken(refreshToken);
     const tokenFromDb = await tokenService.findToken(refreshToken);
+
+    console.log(userData);
+    console.log(tokenFromDb);
 
     if (!userData || !tokenFromDb) {
       throw ApiError.notAuthenticated('Пользователь не авторизован');
@@ -109,7 +113,8 @@ class UserService {
 
     const user = await User.findByPk(userData.id);
     if (user) {
-      return this.generateUserData(user);
+      const result = await this.generateUserData(user);
+      return result;
     } else {
       throw ApiError.notFound('Пользователь не найден!');
     }

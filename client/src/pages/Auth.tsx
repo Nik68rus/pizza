@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation, useSearchParams } from 'react-router-dom';
+import { Link, Navigate, useLocation, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import isEmail from 'validator/lib/isEmail';
 import { handleError } from '../helpers/error-handler';
 import { useAppDispatch, useAppSelector } from '../hooks/store';
 import { createUser } from '../http/userAPI';
-import { login, selectUserData } from '../store/slices/userSlice';
+import { login, register, selectUserData } from '../store/slices/userSlice';
 import { RoutePath } from '../types/routes';
 import { IUserRegData } from '../types/user';
 
@@ -17,7 +17,6 @@ const Auth = () => {
   const user = params.get('user');
   const isLogin = location.pathname === RoutePath.LOGIN;
   const [isValid, setIsValid] = useState(false);
-  const [activationNeeded, setActivationNeeded] = useState(false);
 
   const initialState: IUserRegData = {
     email: user && isLogin ? user : '',
@@ -41,15 +40,7 @@ const Auth = () => {
     e
   ) => {
     e.preventDefault();
-    try {
-      const userData = await createUser(formData);
-      toast.success(
-        `Пользователь ${userData.name} успешно зарегистрирован. Для полноценной работы активируйте аккаунт по ссылке, отправленной на почту ${userData.email}!`
-      );
-      setActivationNeeded(true);
-    } catch (error) {
-      handleError(error);
-    }
+    dispatch(register(formData));
   };
 
   const loginSubmitHandler: React.FormEventHandler<HTMLFormElement> = async (
@@ -90,7 +81,7 @@ const Auth = () => {
     localStorage.setItem('accessToken', userData.accessToken);
   }, [userData.refreshToken, userData.accessToken]);
 
-  if (activationNeeded) {
+  if (userData.email && !userData.isActivated) {
     return (
       <div className="content">
         <div className="container">
@@ -111,6 +102,10 @@ const Auth = () => {
         </div>
       </div>
     );
+  }
+
+  if (userData.email && userData.isActivated) {
+    return <Navigate to={RoutePath.HOME} />;
   }
 
   return (

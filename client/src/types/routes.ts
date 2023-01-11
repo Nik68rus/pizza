@@ -7,4 +7,5 @@ export enum RoutePath {
   NOTFOUND = '/404',
   DETAILS = '/pizza',
   ACTIVATION = '/activation',
+  PROFILE = '/profile',
 }

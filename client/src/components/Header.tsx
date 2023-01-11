@@ -65,9 +65,14 @@ const Header = () => {
               Войти
             </Link>
           ) : (
-            <button className="button" onClick={logOutHandler}>
-              Выйти
-            </button>
+            <>
+              <Link to={RoutePath.PROFILE} className="button">
+                Кабинет
+              </Link>
+              <button className="button" onClick={logOutHandler}>
+                Выйти
+              </button>
+            </>
           )}
           <div className="header__cart">
             <Link to={RoutePath.CART} className="button button--cart">

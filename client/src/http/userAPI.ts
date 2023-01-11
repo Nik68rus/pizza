@@ -4,13 +4,13 @@ import { api } from '.';
 
 export const createUser = async (userData: IUserRegData) => {
   const { email, name, password, password2 } = userData;
-  const { data } = await api.post<IUserAuthData>('/user/signup', {
+  const response = await api.post<IUserAuthData>('/user/signup', {
     email: email.toLowerCase().trim(),
     name: name.trim(),
     password: password.trim(),
     password2: password2.trim(),
   });
-  return data;
+  return response;
 };
 
 export const loginUser = async (userData: IUserLoginData) => {
@@ -19,16 +19,16 @@ export const loginUser = async (userData: IUserLoginData) => {
     email: email.toLowerCase().trim(),
     password: password.trim(),
   });
-  console.log(response);
-
   return response;
 };
 
 export const logoutUser = async () => {
-  const { data } = await api.post<string>('/user/logout', null, {
+  const response = await api.post<string>('/user/logout', null, {
     withCredentials: true,
   });
-  return data;
+  console.log(response);
+
+  return response;
 };
 
 export const fetchUsers = async () => {

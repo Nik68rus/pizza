@@ -76,12 +76,11 @@ class UserController {
   async postLogout(req: ExtendedRequest, res: Response, next: NextFunction) {
     try {
       const { refreshToken } = req.cookies;
-      console.log(refreshToken);
 
       const success = await userService.logout(refreshToken);
       if (success) {
         res.clearCookie('refreshToken');
-        return res.status(200).json({ message: 'Logout success!' });
+        return res.status(200).json('Logout success!');
       } else {
         return next(ApiError.internal('Что-то пошло не так!'));
       }
